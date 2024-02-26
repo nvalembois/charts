@@ -3,7 +3,9 @@ name: Release Charts
 on:
   push:
     branches:
-      - deploy
+      - main
+    paths:
+      - charts/**
 
 jobs:
   release:
