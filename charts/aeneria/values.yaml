@@ -48,10 +48,10 @@ app:
     # GRDF_REDIRECT_URI: ''
     # GRDF_ENDPOINT_AUTH: https://sofit-sso-oidc.grdf.fr
     # GRDF_ENDPOINT_DATA: https://api.grdf.fr
-  sealedSecret:
-    # This secret is responsible for many cryptographic methods in the app. You definitely want to have a different one per instance.
-    # cat /dev/urandom | tr -dc 'a-zA-Z0-9-_,;/' | fold -w 128 | head -n 1 | kubeseal --from-file=app=/dev/stdin --name aeneris -n usr-aeneris --raw --controller-namespace=kube-sealed-secrets --controller-name=sealed-secrets
-    app: AgBPMUP6ssBU/6hVZD29fYIMuKmiDEz4vdNq0QFOWU4cwMc+0OCVTlj9aNRGJnnx52h8FYkc2xiIHPdE3icWOdu3WOB9mVRJDVfp3KooYxjp4B6JyBsA3QLsacmQqUsDzSBDfDA8HGsQ4x13ghvWwU/SpC2zudsOYXVS7HNCELeFr097197No5Gt1ANfkU8YAI+4PISFdsrq8BnV2YHA1AOlJpdQnDDLuTpCxBuWOq3DwprMqK64QQZRE7QPpNrIAhlYbLiNbiYIzEFyU2r8Iu+0kuIm8Gam+OdKVQ3o0IQ6yOGLsb7tm25h8Pb+BfumL9S+yhkrmxb8psUQxQ0c+tGOIs7Ghv/Bv8bgV9+BXrR+VEZNeR29hcU0F6ujtKS7uCo9ygATVKDXp2wl/mDw+U07y36lcBwkBZ6NGSev+HvQ69qL9i81Ll6dW3wD7TzKSdU1nzBXXcZNzWJBJ0YiXBizbQlOs/oBsh1DtoFitHTKr21KQksQhEdD+NzgsJ1lmO14JZjLXrZJHb7MFp8MbsJj1S27n6YX6yxmT1SwvLovszKV+6ZT+QDMSq5KmxZ7xLELPow+RZY9081fIZMaIcMP1QojAfkg73QyuhAtHWBMTAQnUkshPs3Cm6dWU0ChVli0ivDQ2/UpiIZdxU/8e3OyC7US6nWADmbBBKT9Z3b+Wh3nRVPfX+OqJhM7CbSt0NKbYeC3LxMLC89/RgkQBkoaY0ylZO1pZTnr8RsSYqxnX13IMqcMetYmqZ5TkTEejeAaiSRonlDya+3ShrafV97sUFQZvS8s7ZW5FW5PKYKq7cjqdAnZTRLTni2RhThbD4A3MlywVI26/69PzLQJx7fzT9/xH4kbo7Tonu5bzrcqUKk=
+  secret:
+    # type can be secret or sealedSecret
+    type: secret
+    app: mustbechanged
     extraValues: {}
 
 db:
