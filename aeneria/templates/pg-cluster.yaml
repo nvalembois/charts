@@ -1,0 +1,72 @@
+{{- if eq .Values.db.type "cnpg" -}}
+---
+# https://cloudnative-pg.io/documentation/1.19/api_reference/#Cluster
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "app.fullname" . }}-db
+  labels: 
+    {{- include "app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: db
+spec:
+  inheritedMetadata:
+    labels:
+      {{- include "app.labels" . | nindent 6 }}
+      app.kubernetes.io/component: db
+
+  instances: 1
+
+  # Allow a node maintenace with database interruption
+  nodeMaintenanceWindow:
+    inProgress: true
+    reusePVC: true
+
+  {{- if .Values.db.affinity }}
+  affinity:
+    {{- range $type, $typeDef := .Values.db.affinity }}
+    {{ $type }}:
+      {{- range $spec, $specDef := $typeDef }}
+      {{ $spec }}:
+        nodeSelectorTerms:
+        {{- range $key, $values := $specDef }}
+        - matchExpressions:
+          - key: {{ $key | quote }}
+            operator: In
+            values:
+            {{- range $value := $values }}
+            - {{ $value | quote }}
+            {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+    
+  storage:
+    size: {{ .Values.db.size  }}
+    storageClass: longhorn
+    resizeInUseVolumes: true
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.db.size  }}
+      volumeMode: Filesystem
+  walStorage:
+    size: {{ .Values.db.size  }}
+    storageClass: longhorn
+    resizeInUseVolumes: true
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.db.size  }}
+      volumeMode: Filesystem
+
+  bootstrap:
+    initdb:
+      database: {{ .Values.db.database  }}
+      owner: {{ .Values.db.username  }}
+
+{{- end -}}
