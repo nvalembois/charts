@@ -3,6 +3,17 @@ entries:
   aeneria:
   - apiVersion: v2
     appVersion: 2.1.1
+    created: "2024-02-27T07:12:39.341201828Z"
+    description: aeneria deployment via Helm
+    digest: 4edaa19ba9e36db3e253ffc158dafdead4a53b36af6518586a1546b494771a46
+    kubeVersion: '>=1.22.0-0'
+    name: aeneria
+    type: application
+    urls:
+    - https://github.com/nvalembois/charts/releases/download/aeneria-1.0.1/aeneria-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: 2.1.1
     created: "2024-02-26T17:26:38.950685611Z"
     description: aeneria deployment via Helm
     digest: 1eb0a408e69ac02ad78283dcc027a6b6f1449746bf892a1603117527084328c9
@@ -303,4 +314,4 @@ entries:
     urls:
     - https://github.com/nvalembois/charts/releases/download/cilium-1.15.0-dev/cilium-1.15.0-dev.tgz
     version: 1.15.0-dev
-generated: "2024-02-26T17:26:39.15499753Z"
+generated: "2024-02-27T07:12:39.341220634Z"
