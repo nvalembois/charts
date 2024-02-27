@@ -27,24 +27,9 @@ spec:
       {{- with .Values.extraPodOptions }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.affinity }}
+      {{- with .Values.affinity }}
       affinity:
-        {{- range $type, $typeDef := .Values.affinity }}
-        {{ $type }}:
-          {{- range $spec, $specDef := $typeDef }}
-          {{ $spec }}:
-            nodeSelectorTerms:
-            {{- range $key, $values := $specDef }}
-            - matchExpressions:
-              - key: {{ $key | quote }}
-                operator: In
-                values:
-                {{- range $value := $values }}
-                - {{ $value | quote }}
-                {{- end }}
-            {{- end }}
-          {{- end }}
-        {{- end }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
         runAsNonRoot: true
@@ -58,6 +43,10 @@ spec:
         image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
         env:
         {{- include "app.env" . | nindent 8 }}
+        {{- with .Values.app.ressources }}
+        ressources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         securityContext:
           privileged: false
           allowPrivilegeEscalation: false
@@ -67,6 +56,10 @@ spec:
             - ALL
       - name: front
         image: "{{ .Values.front.image.repository }}:{{ .Values.front.image.tag | default .Chart.AppVersion }}"
+        {{- with .Values.front.ressources }}
+        ressources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         livenessProbe:
           httpGet:
             path: /

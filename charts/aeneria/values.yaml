@@ -62,20 +62,44 @@ db:
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-        node-role.kubernetes.io/storage: [ "true" ]
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: "node-role.kubernetes.io/storage"
+            operator: In
+            values:
+            - "true"
 
 extraPodOptions: {}
 affinity: {}
-# nodeAffinity:
-#   requiredDuringSchedulingIgnoredDuringExecution:
-#     node-role.kubernetes.io/storage: [ "true" ]
 
 ingress:
   enabled: true
-  host: aeneris.local 
+  host: aeneris.local
 
 # -- Configure the networkPolicies for the chart here.
 # Additional networkPolicies can be added by adding a dictionary key similar to the 'main' networkPolicy.
 # @default -- See below
 networkpolicies:
- enabled: true
+  enabled: true
+  # Set Allowed Ingress Selectors to restrict access to front
+  frontIngressAllowedSelectors: []
+  # - podSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/component: envoy
+  #       app.kubernetes.io/name: contour
+  #   namespaceSelector:
+  #     matchLabels:
+  #       kubernetes.io/metadata.name: kube-contour
+  frontIngressExtraRules: []
+  dbIngressExtraRules: []
+  # - from:
+  #   - namespaceSelector:
+  #       matchLabels:
+  #         kubernetes.io/metadata.name: "kube-postgresql-cnpg"
+  #     podSelector:
+  #       matchLabels:
+  #         app.kubernetes.io/instance: "postgresql-cnpg"
+  #         app.kubernetes.io/name: "cloudnative-pg"
+  #   ports:
+  #   - protocol: TCP
+  #     port: 8000

@@ -10,21 +10,17 @@ spec:
   podSelector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: db
+      app.kubernetes.io/component: web
   policyTypes:
   - Ingress
   ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          app.kubernetes.io/component: envoy
-          app.kubernetes.io/name: contour
-      namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: kube-contour
-    ports:
+  - ports:
     - protocol: TCP
       port: 8080
+    {{- with .Values.networkpolicies.frontIngressAllowedSelectors }}
+    from:
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -48,16 +44,7 @@ spec:
     ports:
     - protocol: TCP
       port: 5432
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: "kube-postgresql-cnpg"
-      podSelector:
-        matchLabels:
-          app.kubernetes.io/instance: "postgresql-cnpg"
-          app.kubernetes.io/name: "cloudnative-pg"
-    ports:
-    - protocol: TCP
-      port: 8000
-
+  {{- with .Values.networkpolicies.dbIngressExtraRules }}
+  {{- toYaml . | nindent 2 }}
+  {{- end -}}
 {{- end -}}

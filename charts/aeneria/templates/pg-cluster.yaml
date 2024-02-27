@@ -21,24 +21,9 @@ spec:
     inProgress: true
     reusePVC: true
 
-  {{- if .Values.db.affinity }}
+  {{- with .Values.db.affinity }}
   affinity:
-    {{- range $type, $typeDef := .Values.db.affinity }}
-    {{ $type }}:
-      {{- range $spec, $specDef := $typeDef }}
-      {{ $spec }}:
-        nodeSelectorTerms:
-        {{- range $key, $values := $specDef }}
-        - matchExpressions:
-          - key: {{ $key | quote }}
-            operator: In
-            values:
-            {{- range $value := $values }}
-            - {{ $value | quote }}
-            {{- end }}
-        {{- end }}
-      {{- end }}
-    {{- end }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
     
   storage:
