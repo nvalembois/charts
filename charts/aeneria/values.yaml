@@ -1,11 +1,72 @@
-# ---
-# https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+## @section Global parameters
+## Please, note that this will override the parameters, including dependencies, configured to use the global value
+##
+global:
+  ## @param global.registry Global Docker image registry
+  registry: ""
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  ## e.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  imagePullSecrets: []
+  ## @param global.storageClass Global StorageClass for Persistent Volume(s)
+  storageClass: ""
+  postgresql:
+    ## @param global.postgresql.auth.postgresPassword Password for the "postgres" admin user (overrides `auth.postgresPassword`)
+    ## @param global.postgresql.auth.username Name for a custom user to create (overrides `auth.username`)
+    ## @param global.postgresql.auth.password Password for the custom user to create (overrides `auth.password`)
+    ## @param global.postgresql.auth.database Name for a custom database to create (overrides `auth.database`)
+    ## @param global.postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`).
+    ## @param global.postgresql.auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.adminPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
+    ## @param global.postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.userPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
+    ## @param global.postgresql.auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
+    ##
+    auth:
+      postgresPassword: ""
+      username: ""
+      password: ""
+      database: ""
+      existingSecret: ""
+      secretKeys:
+        adminPasswordKey: ""
+        userPasswordKey: ""
+        replicationPasswordKey: ""
+    ## @param global.postgresql.service.ports.postgresql PostgreSQL service port (overrides `service.ports.postgresql`)
+    ##
+    service:
+      ports:
+        postgresql: ""
+
+## @section Common parameters
+##
+## @param kubeVersion Override Kubernetes version
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+fullnameOverride: ""
+## @param clusterDomain Kubernetes Cluster Domain
+clusterDomain: cluster.local
+## @param commonLabels Add labels to all the deployed resources
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+commonAnnotations: {}
 
 
+## @section Front parameters
 front:
-  image: 
-    repository: ghcr.io/nvalembois/aeneria-front
+  ## @param front.image.registry Aeneria front image registry
+  ## @param front.image.repository Aeneria front image name
+  ## @param front.image.tag Aeneria front image tag
+  ## @param front.image.digest Aeneria front image digest (takes precedence over tag)
+  ## @param front.image.pullPolicy Aeneria front Image pull policy
+  image:
+    registry: ghcr.io
+    repository: nvalembois/aeneria-front
     tag: 2.1.1-nginx1.25.4-alpine
+    digest: ""
+    pullPolicy: IfNotPresent
+  # @param front.resources Aeneria front resources
   resources:
     limits:
       cpu: 500m
@@ -13,10 +74,21 @@ front:
     requests:
       cpu: 10m
       memory: 64Mi
+
+## @section App parameters
 app:
+  ## @param app.image.registry Aeneria app image registry
+  ## @param app.image.repository Aeneria app image name
+  ## @param app.image.tag Aeneria app image tag
+  ## @param app.image.digest Aeneria app image digest (takes precedence over tag)
+  ## @param app.image.pullPolicy Aeneria app Image pull policy
   image: 
-    repository: ghcr.io/nvalembois/aeneria-app
+    registry: ghcr.io
+    repository: nvalembois/aeneria-app
     tag: 2.1.1-php8.3.3-alpine
+    digest: ""
+    pullPolicy: IfNotPresent
+  # @param app.resources Aeneria front resources
   resources:
     limits:
       cpu: 500m
@@ -24,34 +96,56 @@ app:
     requests:
       cpu: 10m
       memory: 64Mi
-  env: {}
-    # APP_ENV: prod
-    # AENERIA_USER_MAX_PLACES: -1
-    # AENERIA_USER_CAN_SHARE_PLACE: 1
-    # AENERIA_USER_CAN_FETCH: 1
-    # AENERIA_USER_CAN_EXPORT: 1
-    # AENERIA_USER_CAN_IMPORT: 1
-    # AENERIA_PLACE_CAN_BE_PUBLIC: 1
-    # AENERIA_DEMO_MODE: 0
-    # AENERIA_WELCOME_MESSAGE: '<h1>Bienvenue sur æneria</h1>'
-    # AENERIA_PROXY_URL: https://proxy.aeneria.com
-    # AENERIA_PROXY_FOR_ENEDIS: ''
-    # AENERIA_PROXY_FOR_GRDF: ''
-    # ENEDIS_CLIENT_ID: ''
-    # ENEDIS_CLIENT_SECRET: ''
-    # ENEDIS_REDIRECT_URI: ''
-    # ENEDIS_ENDPOINT_AUTH: https://mon-compte-particulier.enedis.fr
-    # ENEDIS_ENDPOINT_TOKEN: https://ext.prod.api.enedis.fr
-    # ENEDIS_ENDPOINT_DATA: https://ext.prod.api.enedis.fr
-    # GRDF_CLIENT_ID: ''
-    # GRDF_CLIENT_SECRET: ''
-    # GRDF_REDIRECT_URI: ''
-    # GRDF_ENDPOINT_AUTH: https://sofit-sso-oidc.grdf.fr
-    # GRDF_ENDPOINT_DATA: https://api.grdf.fr
+  params:
+    # @param app.params.demoMode AENERIA_DEMO_MODE if different 0
+    demoMode: ''
+    # @param app.params.placeCanBePublic AENERIA_PLACE_CAN_BE_PUBLIC: 1
+    placeCanBePublic: ''
+    # @param app.params.proxyForEnedis AENERIA_PROXY_FOR_ENEDIS: ''
+    proxyForEnedis: ''
+    # @param app.params.proxyForGrdf AENERIA_PROXY_FOR_GRDF: ''
+    proxyForGrdf: ''
+    # @param app.params.proxyUrl AENERIA_PROXY_URL: (defaults to https://ingress.hostname)
+    proxyUrl: ''
+    # @param app.params.userCanExport AENERIA_USER_CAN_EXPORT: 1
+    userCanExport: ''
+    # @param app.params.userCanFetch AENERIA_USER_CAN_FETCH: 1
+    userCanFetch: ''
+    # @param app.params.userCanImport AENERIA_USER_CAN_IMPORT: 1
+    userCanImport: ''
+    # @param app.params.userCanSharePlace AENERIA_USER_CAN_SHARE_PLACE: 1
+    userCanSharePlace: ''
+    # @param app.params.aeneriaUserMaxPlaces -> USER_MAX_PLACES -1
+    aeneriaUserMaxPlaces: ''
+    # @param app.params.aeneriaWelcomeMessage WELCOME_MESSAGE
+    aeneriaWelcomeMessage: '<h1>Bienvenue sur æneria</h1>'
+    # @param app.params.appEnv APP_ENV prod
+    appEnv: ''
+    # @param app.params.enedisClientId ENEDIS_CLIENT_ID: ''
+    enedisClientId: ''
+    # @param app.params.enedisEndpointAuth ENEDIS_ENDPOINT_AUTH: https://mon-compte-particulier.enedis.fr
+    enedisEndpointAuth: ''
+    # @param app.params.enedisEndpointData ENEDIS_ENDPOINT_DATA: https://ext.prod.api.enedis.fr
+    enedisEndpointData: ''
+    # @param app.params.enedisEndpointToken ENEDIS_ENDPOINT_TOKEN: https://ext.prod.api.enedis.fr
+    enedisEndpointToken: ''
+    # @param app.params.enedisRedirectUri ENEDIS_REDIRECT_URI: ''
+    enedisRedirectUri: ''
+    # @param app.params.grdfClientId GRDF_CLIENT_ID: ''
+    grdfClientId: ''
+    # @param app.params.grdfEndpointAuth GRDF_ENDPOINT_AUTH: https://sofit-sso-oidc.grdf.fr
+    grdfEndpointAuth: ''
+    # @param app.params.grdfEndpointData GRDF_ENDPOINT_DATA: https://api.grdf.fr
+    grdfEndpointData: ''
+    # @param app.params.grdfRedirectUri GRDF_REDIRECT_URI: ''
+    grdfRedirectUri: ''
+  extraEnv: []
   secret:
     # type can be secret or sealedSecret
     type: secret
     app: mustbechanged
+    enedisClientSecret: ''
+    grdfClientSecret: ''
     extraValues: {}
 
 db:

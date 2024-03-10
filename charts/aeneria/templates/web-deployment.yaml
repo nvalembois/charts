@@ -40,9 +40,12 @@ spec:
       restartPolicy: Always
       containers:
       - name: app
-        image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
+        image: "{{ include "image" (list .Values.app.image .Values.global) }}"
         env:
-        {{- include "app.env" . | nindent 8 }}
+        {{- include "app.env" . | nindent 10 }}
+        {{- with .Values.app.extraEnv }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         {{- with .Values.app.ressources }}
         ressources:
           {{- toYaml . | nindent 10 }}
@@ -55,7 +58,7 @@ spec:
             drop:
             - ALL
       - name: front
-        image: "{{ .Values.front.image.repository }}:{{ .Values.front.image.tag | default .Chart.AppVersion }}"
+        image: "{{ include "image" (list .Values.front.image .Values.global) }}"
         {{- with .Values.front.ressources }}
         ressources:
           {{- toYaml . | nindent 10 }}
