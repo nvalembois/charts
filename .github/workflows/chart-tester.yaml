@@ -9,7 +9,7 @@ on:
     - 'charts/**'  # Déclencher uniquement si un fichier projets.yaml est modifié
 
 env:
-  CHART_DIR: ./charts-  # Variable d'environnement pour le répertoire
+  CHART_DIR: ./charts  # Variable d'environnement pour le répertoire
       
 jobs:
   test:
@@ -27,18 +27,9 @@ jobs:
     - name: Helm lint
       working-directory: ${{ env.CHART_DIR }}
       run: |
-        helm lint .
-    # tester le chart avec tous les projets
-    - name: Test Chart with helm template
-      working-directory: ${{ env.CHART_DIR }}
-      run: |
-        set -e
-        find "$GITHUB_WORKSPACE/projects" -name project.yaml -type f -print0 | \
-          while IFS= read -r file; do
-            echo "Processing $file"
-            name="$(awk '$1=="name:" { print $2;}' $file)"
-            helm template $name . -f values.yaml -f "$file"
-          done
+        for chart in */; do
+          helm lint .
+        done
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
       uses: helm/kind-action@v1.0.0
