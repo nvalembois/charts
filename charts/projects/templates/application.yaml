@@ -1,0 +1,55 @@
+{{- range .Values.dependencies }}
+{{- if not (default false .disabled) }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .alias | default .name | quote }}
+  namespace: kube-argo-cd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: in-cluster
+    namespace: {{ $.Values.name | quote }}
+  project: {{ $.Values.name | quote }}
+  sources:
+  {{- if .name }}
+  - repoURL: https://github.com/NValembois/argo-main.git
+    targetRevision: HEAD
+    ref: self
+  {{- end }}
+  {{- with .additionnalSources }}
+  {{- toYaml .  | nindent 2 }}
+  {{- end }}
+  - repoURL: {{ .repository | quote }}
+    targetRevision: {{ .version | quote }}
+    {{- with .name }}
+    chart: {{ quote . }}
+    {{- end }}
+    {{- with .path }}
+    path: {{ quote . }}
+    {{- end }}
+    {{- with .helm }}
+    helm: {{ toYaml . | nindent 6 }}
+    {{- end }}
+  {{- with .ignoreDifferences }}
+  ignoreDifferences: {{ toYaml . | nindent 4 }}
+  {{- end }}
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    retry:
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+      limit: 2
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - PruneLast=true
+    - ServerSideApply=true
+    - RespectIgnoreDifferences=true
+{{- end }}
+{{- end }}

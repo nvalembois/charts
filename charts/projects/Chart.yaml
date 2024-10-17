@@ -1,0 +1,7 @@
+# Chart.yaml
+apiVersion: v2
+name: project
+description: project Helm Chart that deploys a pg-cluster
+type: application
+version: 1.0.0
+appVersion: 1.0.0
