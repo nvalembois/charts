@@ -3,8 +3,6 @@ name: Helm test chart projects with all projects
 on:
   workflow_dispatch:
   pull_request:
-    branches-ignore:
-      - main  # Exclut les PR vers la branche principale (main)
     paths:
     - 'charts/**'  # Déclencher uniquement si un fichier projets.yaml est modifié
 
