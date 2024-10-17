@@ -1,0 +1,65 @@
+name: Helm test chart projects with all projects
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches-ignore:
+      - main  # Exclut les PR vers la branche principale (main)
+    paths:
+    - 'charts/**'  # Déclencher uniquement si un fichier projets.yaml est modifié
+
+env:
+  CHART_DIR: ./charts-  # Variable d'environnement pour le répertoire
+      
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout le code du repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    # Installer Helm
+    - name: Install Helm
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    # Valider le Chart (Lint)
+    - name: Helm lint
+      working-directory: ${{ env.CHART_DIR }}
+      run: |
+        helm lint .
+    # tester le chart avec tous les projets
+    - name: Test Chart with helm template
+      working-directory: ${{ env.CHART_DIR }}
+      run: |
+        set -e
+        find "$GITHUB_WORKSPACE/projects" -name project.yaml -type f -print0 | \
+          while IFS= read -r file; do
+            echo "Processing $file"
+            name="$(awk '$1=="name:" { print $2;}' $file)"
+            helm template $name . -f values.yaml -f "$file"
+          done
+    # Tester l'installation en utilisant Kind (Kubernetes in Docker)
+    - name: Set up KinD cluster
+      uses: helm/kind-action@v1.0.0
+    # # Installer les CRDs ArgoCD
+    # - name: Install ArgoCD CRDs on KinD
+    #   run: |
+    #     kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/crds.yaml
+    # Installer le Chart
+    # - name: Install Chart on KinD
+    #   working-directory: ${{ env.CHART_DIR }}
+    #   run: |
+    #     while IFS= read -r file; do
+    #       echo "Processing $file"
+    #       name="$(awk '$1=="name:" { print $2;}' $file)"
+    #       helm install $name . -f values.yaml -f "$GITHUB_WORKSPACE/$file" --wait
+    #     done < projects.txt
+    - name: Test Helm charts
+      working-directory: ${{ env.CHART_DIR }}
+      run: |
+        for chart in */; do
+          helm install test-release "$chart" --dry-run
+          helm test test-release
+          helm uninstall test-release
+        done
