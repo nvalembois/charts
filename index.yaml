@@ -314,4 +314,15 @@ entries:
     urls:
     - https://github.com/nvalembois/charts/releases/download/cilium-1.15.0-dev/cilium-1.15.0-dev.tgz
     version: 1.15.0-dev
-generated: "2024-02-27T07:12:39.341220634Z"
+  project:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-10-17T07:02:35.294968501Z"
+    description: project Helm Chart that deploys a pg-cluster
+    digest: 62a9bee235dca48016c1fe55dde2c6ee9687e45de81d2256098398e3a7409a41
+    name: project
+    type: application
+    urls:
+    - project-1.0.0.tgz
+    version: 1.0.0
+generated: "2024-10-17T07:02:35.294982116Z"
