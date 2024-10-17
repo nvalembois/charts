@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: {{ tpl (toYaml .Values.name) . | quote }}
+  name: {{ include "name" . | quote }}
   namespace: {{ tpl (toYaml .Values.argocdNamespace) . | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io

@@ -28,7 +28,7 @@ jobs:
       working-directory: ${{ env.CHART_DIR }}
       run: |
         for chart in */; do
-          helm lint .
+          helm lint "./$chart"
         done
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
