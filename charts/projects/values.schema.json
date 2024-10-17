@@ -1,0 +1,326 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "namespace": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Specify whether to create the namespace",
+                    "default": true
+                },
+                "podSecurity": {
+                    "type": "object",
+                    "properties": {
+                        "audit": {
+                            "type": "string",
+                            "description": "The audit level for pod security",
+                            "default": "restricted"
+                        },
+                        "warn": {
+                            "type": "string",
+                            "description": "The warning level for pod security",
+                            "default": "restricted"
+                        },
+                        "enforce": {
+                            "type": "string",
+                            "description": "The enforcement level for pod security",
+                            "default": "restricted"
+                        }
+                    }
+                }
+            }
+        },
+        "argocdNamespace": {
+            "type": "string",
+            "description": "The namespace where ArgoCD is installed",
+            "default": "kube-argo-cd"
+        },
+        "description": {
+            "type": "string",
+            "description": "A description for the project, using Helm template syntax",
+            "default": "Projet '{{ $.Values.name }}'"
+        },
+        "additionalSourceRepos": {
+            "type": "array",
+            "description": "Additional source repositories for the project",
+            "default": [],
+            "items": {
+                "type": "string"
+            }
+        },
+        "sourceRepos": {
+            "type": "array",
+            "description": "Array of source repositories allowed for the project",
+            "default": "[]",
+            "items": {
+                "type": "string"
+            }
+        },
+        "additionnalDestinations": {
+            "type": "array",
+            "description": "Array of additional destinations allowed for the project",
+            "default": "[]",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "server": {
+                        "type": "string",
+                        "description": "The url of the destination cluster",
+                        "default": ""
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the destination cluster",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "destinations": {
+            "type": "array",
+            "description": "Array of destinations allowed for the project",
+            "default": "[]",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "server": {
+                        "type": "string",
+                        "description": "The url of the destination cluster",
+                        "default": ""
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the destination cluster",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "additionalClusterResourceWhitelist": {
+            "type": "array",
+            "description": "Additional cluster resources allowed for the project",
+            "default": [],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "string",
+                        "description": "The group of the resource",
+                        "default": ""
+                    },
+                    "kind": {
+                        "type": "string",
+                        "description": "The kind of the resource",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "clusterResourceWhitelist": {
+            "type": "array",
+            "description": "Array of cluster resources allowed for the project",
+            "default": "[]",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "string",
+                        "description": "The group of the resource",
+                        "default": ""
+                    },
+                    "kind": {
+                        "type": "string",
+                        "description": "The kind of the resource",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "additionalNamespaceResourceBlacklist": {
+            "type": "array",
+            "description": "Additional namespace resources blacklisted for the project",
+            "default": [],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "string",
+                        "description": "The group of the resource",
+                        "default": ""
+                    },
+                    "kind": {
+                        "type": "string",
+                        "description": "The kind of the resource",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "namespaceResourceBlacklist": {
+            "type": "array",
+            "description": "Array of namespace resources blacklisted for the project",
+            "default": "[]",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "string",
+                        "description": "The group of the resource",
+                        "default": ""
+                    },
+                    "kind": {
+                        "type": "string",
+                        "description": "The kind of the resource",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "additionalNamespaceResourceWhitelist": {
+            "type": "array",
+            "description": "Additional namespace resources whitelisted for the project",
+            "default": "[]",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "string",
+                        "description": "The group of the resource",
+                        "default": ""
+                    },
+                    "kind": {
+                        "type": "string",
+                        "description": "The kind of the resource",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "namespaceResourceWhitelist": {
+            "type": "array",
+            "description": "Array of namespace resources whitelisted for the project",
+            "default": "[]",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "string",
+                        "description": "The group of the resource",
+                        "default": ""
+                    },
+                    "kind": {
+                        "type": "string",
+                        "description": "The kind of the resource",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "orphanedResources": {
+            "type": "object",
+            "properties": {
+                "warn": {
+                    "type": "boolean",
+                    "description": "Whether to warn about orphaned resources",
+                    "default": false
+                }
+            }
+        },
+        "roles": {
+            "type": "array",
+            "description": "Array of roles associated with the project",
+            "default": "[]",
+            "items": {
+                "type": "string"
+            }
+        },
+        "syncWindows": {
+            "type": "array",
+            "description": "Sync windows for the project",
+            "default": [],
+            "items": {}
+        },
+        "permitOnlyProjectScopedClusters": {
+            "type": "boolean",
+            "description": "Restrict to project-scoped clusters only",
+            "default": false
+        },
+        "sourceNamespaces": {
+            "type": "array",
+            "description": "Array of source namespaces for the project",
+            "default": "[]",
+            "items": {
+                "type": "string"
+            }
+        },
+        "dependencies": {
+            "type": "array",
+            "description": "Array of project dependencies",
+            "default": "[]",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "repository": {
+                        "type": "string",
+                        "description": "Repository URL for the dependency",
+                        "default": ""
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "Repository URL for the dependency",
+                        "default": ""
+                    },
+                    "alias": {
+                        "type": "string",
+                        "description": "Repository URL for the dependency",
+                        "default": ""
+                    },
+                    "version": {
+                        "type": "string",
+                        "description": "Repository URL for the dependency",
+                        "default": ""
+                    },
+                    "helm": {
+                        "type": "object",
+                        "releaseName": {
+                            "type": "string",
+                            "description": "Release Name for helm dependency"
+                        },
+                        "valueFiles": {
+                            "type": "array",
+                            "description": "Value files for helm dependency",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ignoreDifferences": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "group": { "type": "string" },
+                            "kind": { "type": "string" },
+                            "jqPathExpressions": { 
+                                "type": "array",
+                                "items": { "type": "string" }
+                            }
+                        },
+                        "releaseName": {
+                            "type": "string",
+                            "description": "Release Name for helm dependency"
+                        },
+                        "valueFiles": {
+                            "type": "array",
+                            "description": "Value files for helm dependency",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,148 @@
+# https://www.npmjs.com/package/@bitnami/readme-generator-for-helm
+## Namespace configuration
+## @section Namespace
+## @param namespace.create Specify whether to create the namespace
+namespace:
+  create: true
+
+  ## Pod Security policies for the namespace
+  ## @param namespace.podSecurity.audit The audit level for pod security
+  ## @param namespace.podSecurity.warn The warning level for pod security
+  ## @param namespace.podSecurity.enforce The enforcement level for pod security
+  podSecurity:
+    audit: restricted
+    warn: restricted
+    enforce: restricted
+
+## ArgoCD Project Configuration
+## @section ArgoCD Project
+## @param argocdNamespace The namespace where ArgoCD is installed
+argocdNamespace: kube-argo-cd
+
+## @param description A description for the project, using Helm template syntax
+description: "Projet '{{ $.Values.name }}'"
+
+## Additional source repositories
+## @param additionalSourceRepos Additional source repositories for the project
+additionalSourceRepos: []
+
+## Array of source repositories
+## @param sourceRepos [array] Array of source repositories allowed for the project
+sourceRepos:
+  - 'https://github.com/NValembois/**'
+
+## Additional destinations for the project
+## @param additionnalDestinations [array] Array of additional destinations allowed for the project
+additionnalDestinations: []
+
+## Array of destinations
+## @param destinations [array] Array of destinations allowed for the project
+destinations:
+  - server: 'https://kubernetes.default.svc'
+    name: 'in-cluster'
+
+## Cluster resource whitelist
+## @param additionalClusterResourceWhitelist Additional cluster resources allowed for the project
+## @param clusterResourceWhitelist [array] Array of cluster resources allowed for the project
+additionalClusterResourceWhitelist: []
+clusterResourceWhitelist: []
+
+## Namespace resource blacklist
+## @param additionalNamespaceResourceBlacklist Additional namespace resources blacklisted for the project
+## @param namespaceResourceBlacklist [array] Array of namespace resources blacklisted for the project
+additionalNamespaceResourceBlacklist: []
+namespaceResourceBlacklist: []
+
+## Namespace resource whitelist
+## @param additionalNamespaceResourceWhitelist [array] Additional namespace resources whitelisted for the project
+additionalNamespaceResourceWhitelist: []
+## @param namespaceResourceWhitelist [array] Array of namespace resources whitelisted for the project
+namespaceResourceWhitelist:
+  - group: ''
+    kind: ConfigMap
+  - group: ''
+    kind: PersistentVolumeClaim
+  - group: ''
+    kind: Pod
+  - group: ''
+    kind: Secret
+  - group: ''
+    kind: ServiceAccount
+  - group: ''
+    kind: Service
+  - group: apps
+    kind: DaemonSet
+  - group: apps
+    kind: Deployment
+  - group: apps
+    kind: ReplicaSet
+  - group: apps
+    kind: StatefulSet
+  - group: autoscaling
+    kind: HorizontalPodAutoscaler
+  - group: batch
+    kind: CronJob
+  - group: batch
+    kind: Job
+  - group: networking.k8s.io
+    kind: Ingress
+  - group: networking.k8s.io
+    kind: NetworkPolicy
+  - group: bitnami.com
+    kind: SealedSecret
+  - group: cert-manager.io
+    kind: CertificateRequest
+  - group: cert-manager.io
+    kind: Certificate
+  - group: cert-manager.io
+    kind: Issuer
+  - group: job.min.io
+    kind: MinIOJob
+  - group: metrics.k8s.io
+    kind: PodMetrics
+  - group: monitoring.coreos.com
+    kind: PodMonitor
+  - group: monitoring.coreos.com
+    kind: ServiceMonitor
+  - group: monitoring.coreos.com
+    kind: PrometheusRule
+  - group: monitoring.grafana.com
+    kind: MetricsInstance
+  - group: policy
+    kind: PodDisruptionBudget
+  - group: postgresql.cnpg.io
+    kind: Backup
+  - group: postgresql.cnpg.io
+    kind: Cluster
+  - group: postgresql.cnpg.io
+    kind: ScheduledBackup
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: s3.onyxia.sh
+    kind: Path
+  - group: snapshot.storage.k8s.io
+    kind: VolumeSnapshot
+
+## Orphaned resources
+## @param orphanedResources.warn Whether to warn about orphaned resources
+orphanedResources:
+  warn: false
+
+## Roles and sync windows
+## @param roles [array] Array of roles associated with the project
+roles: []
+
+## @param syncWindows Sync windows for the project
+syncWindows: []
+
+## Miscellaneous settings
+## @param permitOnlyProjectScopedClusters Restrict to project-scoped clusters only
+permitOnlyProjectScopedClusters: false
+
+## @param sourceNamespaces [array] Array of source namespaces for the project
+sourceNamespaces: []
+
+## @param dependencies [array] Array of project dependencies
+dependencies: []
