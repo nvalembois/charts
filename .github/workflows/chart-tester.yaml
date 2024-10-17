@@ -41,7 +41,7 @@ jobs:
           done
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
-      uses: helm/kind-action@v1.0.0
+      uses: helm/kind-action@v1.10.0
     # # Installer les CRDs ArgoCD
     # - name: Install ArgoCD CRDs on KinD
     #   run: |
