@@ -30,6 +30,7 @@ additionalSourceRepos: []
 ## @param sourceRepos [array] Array of source repositories allowed for the project
 sourceRepos:
   - 'https://github.com/NValembois/**'
+  - 'https://nvalembois.github.io/charts/'
 
 ## Additional destinations for the project
 ## @param additionnalDestinations [array] Array of additional destinations allowed for the project
