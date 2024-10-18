@@ -69,7 +69,7 @@ jobs:
           if [[ -d ci/crds ]]; then
             for crd in ci/crds/*.yaml; do
               echo " apply $crd"
-              helm apply -f "$crd"
+              helm apply -f "$crd" --wait
             done
           fi
           helm install "$(dirname "$chart")" . -f values.yaml --wait
