@@ -73,4 +73,5 @@ jobs:
             done
           fi
           helm install "$(dirname "$chart")" . -f values.yaml --wait
+          popd
         done
