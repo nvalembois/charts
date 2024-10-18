@@ -5,7 +5,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: {{ .Values.global.postgresql.host | default .Values.host | quote  }}
+  name: {{ (dig "global" "postgresql" "host" nil .Values) | default .Values.host | quote  }}
 spec:
   instances: {{ .Values.instances }}
 
@@ -47,5 +47,5 @@ spec:
 
   bootstrap:
     initdb:
-      database: {{ .Values.global.postgresql.database | default .Values.database | quote  }}
-      owner: {{ .Values.global.postgresql.username | default .Values.username | quote  }}
+      database: {{ (dig "global" "postgresql" "database" nil .Values) | default .Values.database | quote  }}
+      owner: {{ (dig "global" "postgresql" "username" nil .Values) | default .Values.username | quote  }}
