@@ -1,0 +1,51 @@
+{{- $size := .Values.size  -}}
+{{- $walSize := .Values.walsize | default $size -}}
+---
+# https://cloudnative-pg.io/documentation/1.19/api_reference/#Cluster
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.global.postgresql.host | default .Values.host | quote  }}
+spec:
+  instances: {{ .Values.instances }}
+
+  # Allow a node maintenace with database interruption
+  nodeMaintenanceWindow:
+    inProgress: true
+    reusePVC: true
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/storage
+            operator: In
+            values:
+            - "true"
+    
+  storage:
+    size: {{ $size | quote  }}
+    resizeInUseVolumes: true
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ $size | quote  }}
+      volumeMode: Filesystem
+  walStorage:
+    size: {{ $walSize | quote  }}
+    resizeInUseVolumes: true
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ $walSize | quote  }}
+      volumeMode: Filesystem
+
+  bootstrap:
+    initdb:
+      database: {{ .Values.global.postgresql.database | default .Values.database | quote  }}
+      owner: {{ .Values.global.postgresql.username | default .Values.username | quote  }}

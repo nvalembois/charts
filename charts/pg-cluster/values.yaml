@@ -1,0 +1,6 @@
+instances: 1
+size: 2Gi
+# walsize: 2Gi
+host: postgres
+database: db
+username: db-user
