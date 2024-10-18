@@ -65,6 +65,7 @@ jobs:
         for chart in ${{ needs.changed-charts.outputs.list }}
         do
           echo "Processing $chart"
+          name="$(basename "$chart")"
           pushd "$chart"
           if [[ -d ci/crds ]]; then
             for crd in ci/crds/*.yaml; do
@@ -72,6 +73,6 @@ jobs:
               kubectl apply -f "$crd"
             done
           fi
-          helm install "$(basename "$chart")" . -f values.yaml --wait
+          helm install "$name" . -f values.yaml -n "$name" --create-namespace --wait
           popd
         done
