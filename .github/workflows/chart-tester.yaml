@@ -1,7 +1,6 @@
 name: Helm test chart projects with all projects
 
 on:
-  workflow_dispatch:
   pull_request:
     paths:
     - 'charts/**'  # Déclencher uniquement si un fichier projets.yaml est modifié
@@ -10,45 +9,86 @@ env:
   CHART_DIR: ./charts  # Variable d'environnement pour le répertoire
       
 jobs:
-  test:
+  changed-charts:
+    name: Get changed charts
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.changed-charts.outputs.all_changed_files }}
     steps:
     # Checkout le code du repository
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+    - name: Get charts changed
+      id: changed-charts
+      uses: tj-actions/changed-files@v45.0.3
+      with:
+        dir_names: true
+        files: 'charts/**'
+        matrix: true
+  
+  test-chart:
+    name: Test changed charts
+    runs-on: ubuntu-latest
+    needs: [changed-charts]
+    strategy:
+      matrix: 
+        files: ${{ fromJSON(needs.changed-charts.outputs.matrix) }}
+      max-parallel: 4
+      fail-fast: false
+    steps:
+    # Checkout le code du repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
     # Installer Helm
     - name: Install Helm
       run: |
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
     # Valider le Chart (Lint)
     - name: Helm lint
-      working-directory: ${{ env.CHART_DIR }}
       run: |
-        for chart in */; do
-          helm lint "./$chart"
-        done
+        echo "Processing ${{ matrix.files }}"
+        helm lint "${{ matrix.files }}"
+
+  test-chart-deploy:
+    name: Test changed charts in kind
+    runs-on: ubuntu-latest
+    needs: [changed-charts]
+    steps:
+    # Checkout le code du repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+    # Installer Helm
+    - name: Install Helm
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
       uses: helm/kind-action@v1.10.0
-    # # Installer les CRDs ArgoCD
-    # - name: Install ArgoCD CRDs on KinD
-    #   run: |
-    #     kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/crds.yaml
-    # Installer le Chart
-    # - name: Install Chart on KinD
-    #   working-directory: ${{ env.CHART_DIR }}
-    #   run: |
-    #     while IFS= read -r file; do
-    #       echo "Processing $file"
-    #       name="$(awk '$1=="name:" { print $2;}' $file)"
-    #       helm install $name . -f values.yaml -f "$GITHUB_WORKSPACE/$file" --wait
-    #     done < projects.txt
-    - name: Test Helm charts
-      working-directory: ${{ env.CHART_DIR }}
+    # Installer les CRDs ArgoCD
+    - name: Install ArgoCD CRDs on KinD
       run: |
-        for chart in */; do
-          helm install test-release "$chart" --dry-run
-          helm test test-release
-          helm uninstall test-release
+        kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/crds.yaml
+    # Installer le Chart
+    - name: Install Chart on KinD
+      run: |
+        echo "matrix: ${{ needs.changed-charts.outputs.matrix }}"
+        echo "fromJSON: ${{ fromJSON(needs.changed-charts.outputs.matrix) }}"
+
+        for chart in ${{ fromJSON(needs.changed-charts.outputs.matrix) }}
+        do
+          echo "Processing $chart"
+          pushd "$chart"
+          if [[ -d ci/crds ]]; then
+            for crd in ci/crds/*.yaml; do
+              echo " apply $crd"
+              helm apply -f "$crd"
+            done
+          fi
+          helm install "$(dirname "$chart")" . -f values.yaml --wait
         done
