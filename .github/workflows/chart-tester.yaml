@@ -13,7 +13,7 @@ jobs:
     name: Get changed charts
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.changed-charts.outputs.all_changed_files }}
+      list: ${{ steps.changed-charts.outputs.all_changed_files }}
     steps:
     # Checkout le code du repository
     - name: Checkout repository
@@ -27,57 +27,42 @@ jobs:
         dir_names: true
         dir_names_max_depth: 2
         files: 'charts/**'
-        matrix: true
   
   test-chart:
     name: Test changed charts
     runs-on: ubuntu-latest
     needs: [changed-charts]
-    strategy:
-      matrix: 
-        files: ${{ fromJSON(needs.changed-charts.outputs.matrix) }}
-      max-parallel: 4
-      fail-fast: false
     steps:
     # Checkout le code du repository
     - name: Checkout repository
       uses: actions/checkout@v4
+      timeout-minutes: 5
       with:
         fetch-depth: 1
     # Installer Helm
     - name: Install Helm
+      timeout-minutes: 5
       run: |
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
     # Valider le Chart (Lint)
     - name: Helm lint
+      timeout-minutes: 5
       run: |
-        echo "Processing ${{ matrix.files }}"
-        helm lint "${{ matrix.files }}"
-
-  test-chart-deploy:
-    name: Test changed charts in kind
-    runs-on: ubuntu-latest
-    needs: [changed-charts]
-    steps:
-    # Checkout le code du repository
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 1
-    # Installer Helm
-    - name: Install Helm
-      run: |
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        echo "list: ${{ needs.changed-charts.outputs.list }}"
+        for chart in ${{ needs.changed-charts.outputs.list }}
+        do
+          echo "Processing $chart"
+          helm lint "$chart"
+        done
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
+      timeout-minutes: 10
       uses: helm/kind-action@v1.10.0
     # Installer le Chart
     - name: Install Chart on KinD
+      timeout-minutes: 5
       run: |
-        echo "matrix: ${{ needs.changed-charts.outputs.matrix }}"
-        echo "fromJSON: ${{ fromJSON(needs.changed-charts.outputs.matrix) }}"
-
-        for chart in ${{ fromJSON(needs.changed-charts.outputs.matrix) }}
+        for chart in ${{ needs.changed-charts.outputs.list }}
         do
           echo "Processing $chart"
           pushd "$chart"
