@@ -25,6 +25,7 @@ jobs:
       uses: tj-actions/changed-files@v45.0.3
       with:
         dir_names: true
+        dir_names_max_depth: 2
         files: 'charts/**'
         matrix: true
   
@@ -70,10 +71,6 @@ jobs:
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
       uses: helm/kind-action@v1.10.0
-    # Installer les CRDs ArgoCD
-    - name: Install ArgoCD CRDs on KinD
-      run: |
-        kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/crds.yaml
     # Installer le Chart
     - name: Install Chart on KinD
       run: |
