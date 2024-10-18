@@ -1,6 +1,6 @@
 {{- $size := .Values.size  -}}
 {{- $walSize := .Values.walsize | default $size -}}
-{{- $pg := dig "global" "postgresql" ( dict ) .Values }}
+{{- $pg := dig "global" "postgresql" null .Values | default ( dict ) -}}
 ---
 # https://cloudnative-pg.io/documentation/1.19/api_reference/#Cluster
 apiVersion: postgresql.cnpg.io/v1
