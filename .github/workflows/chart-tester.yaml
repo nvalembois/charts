@@ -60,7 +60,7 @@ jobs:
       uses: helm/kind-action@v1.10.0
     # Installer le Chart
     - name: Install Chart on KinD
-      timeout-minutes: 5
+      timeout-minutes: 10
       run: |
         for chart in ${{ needs.changed-charts.outputs.list }}
         do
@@ -71,6 +71,8 @@ jobs:
             for url in $(cat ci/dependencies.txt); do
               echo " apply $url"
               kubectl apply --server-side -f "$url"
+              kubectl delete pod -A --field-selector=status.phase==Succeeded
+              kubectl wait   pod -A --for=condition=Ready --all --timeout=120s
             done
           fi
           helm install "$name" . -f values.yaml -n "$name" --create-namespace --wait
