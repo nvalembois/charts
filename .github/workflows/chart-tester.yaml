@@ -25,8 +25,9 @@ jobs:
       uses: tj-actions/changed-files@v45.0.3
       with:
         dir_names: true
-        dir_names_max_depth: 2
-        files: 'charts/**'
+        dir_names_max_depth: 1
+        path: $CHART_DIR
+        diff_relative: true
         matrix: true
 
   test-chart:
@@ -55,9 +56,10 @@ jobs:
     # Valider le Chart (Lint)
     - name: Helm lint
       timeout-minutes: 5
+      working-directory: $CHART_DIR/$chart
       run: |
         echo "Processing $chart"
-        helm lint "$chart"
+        helm lint .
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
       timeout-minutes: 10
@@ -65,10 +67,9 @@ jobs:
     # Installer le Chart
     - name: Install Chart on KinD
       timeout-minutes: 10
+      working-directory: $CHART_DIR/$chart
       run: |
         echo "Processing $chart"
-        name="$(basename "$chart")"
-        pushd "$chart"
         if [[ -f ci/dependencies.txt ]]; then
           for url in $(cat ci/dependencies.txt); do
             echo " apply $url"
@@ -80,5 +81,4 @@ jobs:
             kubectl wait   pod -A --for=condition=Ready --all --timeout=120s
           done
         fi
-        helm install "$name" . -f values.yaml -n "$name" --create-namespace --dependency-update --wait --timeout=120s
-        popd
+        helm install "$chart" . -f values.yaml -n "$chart" --create-namespace --dependency-update --wait --timeout=120s
