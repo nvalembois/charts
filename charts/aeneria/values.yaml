@@ -16,7 +16,7 @@ front:
 app:
   image: 
     repository: ghcr.io/nvalembois/aeneria-app
-    tag: 2.1.1-php8.3.3-alpine
+    tag: 2.1.1-php8.3.12-fpm-alpine
   resources:
     limits:
       cpu: 500m
@@ -58,7 +58,7 @@ db:
   type: cnpg
   database: aeneris
   username: aeneris
-  size: 2Gi
+  size: 200Mi
   affinity: {}
   # nodeAffinity:
   #   requiredDuringSchedulingIgnoredDuringExecution:

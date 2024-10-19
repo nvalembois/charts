@@ -1,0 +1,35 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "instances": {
+            "type": "integer",
+            "description": "Number of instances to create",
+            "default": 1
+        },
+        "size": {
+            "type": "string",
+            "description": "DB size",
+            "default": "2Gi"
+        },
+        "walsize": {
+            "type": "string",
+            "description": "WAL size defaults to DB size"
+        },
+        "host": {
+            "type": "string",
+            "description": "DB host",
+            "default": "postgres"
+        },
+        "database": {
+            "type": "string",
+            "description": "DB name",
+            "default": "db"
+        },
+        "username": {
+            "type": "string",
+            "description": "DB username",
+            "default": "db-user"
+        }
+    }
+}
