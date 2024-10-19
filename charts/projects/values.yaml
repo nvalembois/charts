@@ -3,7 +3,7 @@
 ## @section Namespace
 ## @param namespace.create Specify whether to create the namespace
 namespace:
-  create: true
+  create: false
 
   ## Pod Security policies for the namespace
   ## @param namespace.podSecurity.audit The audit level for pod security
@@ -17,7 +17,7 @@ namespace:
 ## ArgoCD Project Configuration
 ## @section ArgoCD Project
 ## @param argocdNamespace The namespace where ArgoCD is installed
-argocdNamespace: kube-argo-cd
+argocdNamespace: default
 
 ## @param description A description for the project, using Helm template syntax
 description: "Projet '{{ $.Values.name }}'"

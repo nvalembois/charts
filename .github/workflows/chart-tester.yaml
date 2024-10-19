@@ -1,12 +1,13 @@
-name: Helm test chart projects with all projects
+name: Helm test charts
+
+env:
+  CHART_DIR: charts  # Variable d'environnement pour le répertoire
 
 on:
   pull_request:
     paths:
-    - 'charts/**'  # Déclencher uniquement si un fichier projets.yaml est modifié
+    - 'charts/**'  # Déclencher uniquement si un chart est modifié
 
-env:
-  CHART_DIR: charts  # Variable d'environnement pour le répertoire
       
 jobs:
   changed-charts:
@@ -31,7 +32,7 @@ jobs:
         matrix: true
 
   test-chart:
-    name: Test changed charts
+    name: Test chart
     runs-on: ubuntu-latest
     needs: [changed-charts]
     strategy:
@@ -81,4 +82,5 @@ jobs:
             kubectl wait   pod -A --for=condition=Ready --all --timeout=120s
           done
         fi
+        echo " deploy chart $chart"
         helm install "$chart" . -f values.yaml -n "$chart" --create-namespace --dependency-update --wait --timeout=120s
