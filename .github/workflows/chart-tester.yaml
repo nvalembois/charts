@@ -67,10 +67,10 @@ jobs:
           echo "Processing $chart"
           name="$(basename "$chart")"
           pushd "$chart"
-          if [[ -d ci/crds ]]; then
-            for crd in ci/crds/*.yaml; do
-              echo " apply $crd"
-              kubectl apply -f "$crd"
+          if [[ -f ci/dependencies.txt ]]; then
+            for url in $(cat ci/dependencies.txt); do
+              echo " apply $url"
+              kubectl apply --server-side -f "$url"
             done
           fi
           helm install "$name" . -f values.yaml -n "$name" --create-namespace --wait
