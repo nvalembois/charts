@@ -28,7 +28,9 @@ spec:
     
   storage:
     size: {{ .Values.db.size  }}
-    storageClass: longhorn
+    {{- with .Values.db.storageClass }}
+    storageClass: {{ . | quote }}
+    {{- end }}
     resizeInUseVolumes: true
     pvcTemplate:
       accessModes:
@@ -39,7 +41,9 @@ spec:
       volumeMode: Filesystem
   walStorage:
     size: {{ .Values.db.size  }}
-    storageClass: longhorn
+    {{- with .Values.db.storageClass }}
+    storageClass: {{ . | quote }}
+    {{- end }}
     resizeInUseVolumes: true
     pvcTemplate:
       accessModes:
