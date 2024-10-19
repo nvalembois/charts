@@ -1,0 +1,86 @@
+name: Helm test charts
+
+env:
+  CHART_DIR: charts  # Variable d'environnement pour le répertoire
+
+on:
+  pull_request:
+    paths:
+    - 'charts/**'  # Déclencher uniquement si un chart est modifié
+
+      
+jobs:
+  changed-charts:
+    name: Get changed charts
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed-charts.outputs.all_changed_files }}
+    steps:
+    # Checkout le code du repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+    - name: Get charts changed
+      id: changed-charts
+      uses: tj-actions/changed-files@v45.0.3
+      with:
+        dir_names: true
+        dir_names_max_depth: 1
+        path: ${{ env.CHART_DIR }}
+        diff_relative: true
+        matrix: true
+
+  test-chart:
+    name: Test chart
+    runs-on: ubuntu-latest
+    needs: [changed-charts]
+    strategy:
+      matrix: 
+        files: ${{ fromJSON(needs.changed-charts.outputs.matrix) }}
+      max-parallel: 4
+      fail-fast: false
+    env:
+      chart: ${{ matrix.files }}
+    steps:
+    # Checkout le code du repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      timeout-minutes: 5
+      with:
+        fetch-depth: 1
+    # Installer Helm
+    - name: Install Helm
+      timeout-minutes: 5
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    # Valider le Chart (Lint)
+    - name: Helm lint
+      timeout-minutes: 5
+      working-directory: ${{ env.CHART_DIR }}/${{ env.chart }}
+      run: |
+        echo "Processing $chart"
+        helm lint .
+    # Tester l'installation en utilisant Kind (Kubernetes in Docker)
+    - name: Set up KinD cluster
+      timeout-minutes: 10
+      uses: helm/kind-action@v1.10.0
+    # Installer le Chart
+    - name: Install Chart on KinD
+      timeout-minutes: 10
+      working-directory: ${{ env.CHART_DIR }}/${{ env.chart }}
+      run: |
+        echo "Processing $chart"
+        if [[ -f ci/dependencies.txt ]]; then
+          for url in $(cat ci/dependencies.txt); do
+            echo " apply $url"
+            kubectl apply --server-side -f "$url"
+            echo " wait for deployment is ready"
+            # delete all succeeded pods (jobs)
+            kubectl delete pod -A --field-selector=status.phase==Succeeded
+            # wait all pods are iun ready state
+            kubectl wait   pod -A --for=condition=Ready --all --timeout=120s
+          done
+        fi
+        echo " deploy chart $chart"
+        helm install "$chart" . -f values.yaml -n "$chart" --create-namespace --dependency-update --wait --timeout=120s
