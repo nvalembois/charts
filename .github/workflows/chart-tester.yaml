@@ -71,10 +71,13 @@ jobs:
             for url in $(cat ci/dependencies.txt); do
               echo " apply $url"
               kubectl apply --server-side -f "$url"
+              echo " wait for deployment is ready"
+              # delete all succeeded pods (jobs)
               kubectl delete pod -A --field-selector=status.phase==Succeeded
+              # wait all pods are iun ready state
               kubectl wait   pod -A --for=condition=Ready --all --timeout=120s
             done
           fi
-          helm install "$name" . -f values.yaml -n "$name" --create-namespace --wait
+          helm install "$name" . -f values.yaml -n "$name" --create-namespace --dependency-update --wait --timeout=120s
           popd
         done
