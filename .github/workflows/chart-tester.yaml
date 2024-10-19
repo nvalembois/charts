@@ -6,7 +6,7 @@ on:
     - 'charts/**'  # Déclencher uniquement si un fichier projets.yaml est modifié
 
 env:
-  CHART_DIR: ./charts  # Variable d'environnement pour le répertoire
+  CHART_DIR: charts  # Variable d'environnement pour le répertoire
       
 jobs:
   changed-charts:
@@ -26,7 +26,7 @@ jobs:
       with:
         dir_names: true
         dir_names_max_depth: 1
-        path: $CHART_DIR
+        path: ${{ env.CHART_DIR }}
         diff_relative: true
         matrix: true
 
@@ -56,7 +56,7 @@ jobs:
     # Valider le Chart (Lint)
     - name: Helm lint
       timeout-minutes: 5
-      working-directory: $CHART_DIR/$chart
+      working-directory: ${{ env.CHART_DIR }}/${{ env.chart }}
       run: |
         echo "Processing $chart"
         helm lint .
@@ -67,7 +67,7 @@ jobs:
     # Installer le Chart
     - name: Install Chart on KinD
       timeout-minutes: 10
-      working-directory: $CHART_DIR/$chart
+      working-directory: ${{ env.CHART_DIR }}/${{ env.chart }}
       run: |
         echo "Processing $chart"
         if [[ -f ci/dependencies.txt ]]; then
