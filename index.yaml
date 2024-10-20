@@ -23,6 +23,17 @@ entries:
     urls:
     - https://github.com/nvalembois/charts/releases/download/aeneria-1.0.0/aeneria-1.0.0.tgz
     version: 1.0.0
+  pg-cluster:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-10-20T07:25:33.289570799Z"
+    description: pg-cluster Helm Chart that creates CloudnativePG Postgres Cluster
+    digest: 04af40d37458c715e6c73824b10b884a97d5155ef49c097441b797d5898f1b97
+    name: pg-cluster
+    type: application
+    urls:
+    - pg-cluster-1.0.0.tgz
+    version: 1.0.0
   project:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -34,4 +45,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2024-10-17T07:02:35.294982116Z"
+generated: "2024-10-20T07:25:33.400719029Z"
