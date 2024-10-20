@@ -1,7 +1,7 @@
 # Chart.yaml
 apiVersion: v2
-name: project
-description: project Helm Chart that creates project resources (argocd, namespace)
+name: pg-cluster
+description: pg-cluster Helm Chart that creates CloudnativePG Postgres Cluster 
 type: application
 version: 1.0.0
 appVersion: 1.0.0
