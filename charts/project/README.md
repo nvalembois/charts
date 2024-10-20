@@ -8,7 +8,7 @@ A chart to create namespace, argo-cd project and applications for a project.
 
 | Name                            | Description                             | Value        |
 | ------------------------------- | --------------------------------------- | ------------ |
-| `namespace.create`              | Specify whether to create the namespace | `true`       |
+| `namespace.create`              | Specify whether to create the namespace | `false`      |
 | `namespace.podSecurity.audit`   | The audit level for pod security        | `restricted` |
 | `namespace.podSecurity.warn`    | The warning level for pod security      | `restricted` |
 | `namespace.podSecurity.enforce` | The enforcement level for pod security  | `restricted` |
@@ -17,7 +17,7 @@ A chart to create namespace, argo-cd project and applications for a project.
 
 | Name                                   | Description                                                | Value                          |
 | -------------------------------------- | ---------------------------------------------------------- | ------------------------------ |
-| `argocdNamespace`                      | The namespace where ArgoCD is installed                    | `kube-argo-cd`                 |
+| `argocdNamespace`                      | The namespace where ArgoCD is installed                    | `default`                      |
 | `description`                          | A description for the project, using Helm template syntax  | `Projet '{{ $.Values.name }}'` |
 | `additionalSourceRepos`                | Additional source repositories for the project             | `[]`                           |
 | `sourceRepos`                          | Array of source repositories allowed for the project       | `[]`                           |
