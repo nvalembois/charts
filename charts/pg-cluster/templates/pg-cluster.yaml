@@ -10,6 +10,16 @@ metadata:
 spec:
   instances: {{ .Values.instances }}
 
+  managed:
+    services:
+      additional:
+      - selectorType: rw
+        serviceTemplate:
+          metadata:
+            name: {{ $globalPg.host | default .Values.host | quote  }}
+          spec:
+            type: LoadBalancer
+
   # Allow a node maintenace with database interruption
   nodeMaintenanceWindow:
     inProgress: true
