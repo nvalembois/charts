@@ -1,6 +1,14 @@
+## PG Cluster configuration
+## @section Configuration
+## @param instances Number of pg instances to deploy
 instances: 1
+## @param size Size of DB Filesystem
 size: 2Gi
-# walsize: 2Gi
+## @param walsize Size of WAL Filesystem
+walsize: 2Gi
+## @param host PG Cluster hostname (can be overridden by global.postgresql.host)
 host: postgres
+## @param database Database name (can be overridden by global.postgresql.database)
 database: db
+## @param username User with full access to database (can be overridden by global.postgresql.username)
 username: db-user
