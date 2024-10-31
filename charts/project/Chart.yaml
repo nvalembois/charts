@@ -3,5 +3,11 @@ apiVersion: v2
 name: project
 description: project Helm Chart that deploys a pg-cluster
 type: application
-version: 1.0.0
+version: 1.0.1
 appVersion: 1.0.0
+
+annotations:
+  artifacthub.io/changes: |
+    - description: Correction de l'URL de ce dépôt dans les sources de projet
+      kind: fixed
+
