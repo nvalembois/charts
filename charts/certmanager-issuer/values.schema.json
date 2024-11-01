@@ -1,0 +1,26 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Issuer name",
+            "default": "{{ .Release.Name }}"
+        },
+        "ca": {
+            "type":"object",
+            "properties": {
+                "duration": {
+                    "type": "string",
+                    "description": "Issuer CA certificate duration",
+                    "default": "87600h0m0s"
+                },
+                "renewBefore": {
+                    "type": "string",
+                    "description": "Issuer CA certificate renew before",
+                    "default": "360h0m0s"
+                }
+            }
+        }
+    }
+}

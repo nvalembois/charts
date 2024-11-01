@@ -1,0 +1,25 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "name" . | printf "%s-ca" | quote  }}
+spec:
+  isCA: true
+  duration: {{ .Values.ca.duration }}
+  renewBefore: {{ .Values.ca.renewBefore }}
+  # subject:
+  #   organizationalUnits:
+  #   - KANAM
+  #   localities:
+  #   - Nantes
+  #   countries:
+  #   - FR
+  commonName: {{ default .Release.Name .Values.name  | printf "%s CA" | quote  }}
+  secretName: {{ include "name" . | printf "%s-ca" | quote  }}
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: {{ include "name" . | printf "%s-ca" | quote  }}
+    kind: Issuer
+    group: cert-manager.io

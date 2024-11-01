@@ -1,0 +1,12 @@
+# https://www.npmjs.com/package/@bitnami/readme-generator-for-helm
+## Namespace configuration
+## @section Configuration
+## @param name [nullable, default: {{ .Release.Name }}] issuer name
+# name: my-issuer
+
+## @section CA issuer
+ca:
+  ## @param ca.duration [default: 10 years] certificate duration
+  duration: 87600h0m0s # 10y
+  ## @param ca.renewBefore [default: 15 days] certificate renew before
+  renewBefore: 360h0m0s # 15d
