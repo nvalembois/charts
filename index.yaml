@@ -23,6 +23,21 @@ entries:
     urls:
     - https://github.com/nvalembois/charts/releases/download/aeneria-1.0.0/aeneria-1.0.0.tgz
     version: 1.0.0
+  certmanager-issuer:
+  - annotations:
+      artifacthub.io/changes: |
+        - description: Creation
+          kind: added
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-11-01T08:20:55.53015194Z"
+    description: certmanager-issuer Helm Chart that creates a certmanager issuer
+    digest: 9abdef283d6a90ed2941bca1b85ac5d7b392317ec50e9180666f6d4797b81377
+    name: certmanager-issuer
+    type: application
+    urls:
+    - certmanager-issuer-1.0.0.tgz
+    version: 1.0.0
   pg-cluster:
   - annotations:
       artifacthub.io/changes: |
@@ -75,4 +90,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2024-10-31T09:33:20.523136376Z"
+generated: "2024-11-01T08:20:55.530181654Z"
