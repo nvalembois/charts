@@ -38,6 +38,22 @@ entries:
     urls:
     - certmanager-issuer-1.0.0.tgz
     version: 1.0.0
+  k8s-store:
+  - annotations:
+      artifacthub.io/changes: |
+        - description: Creation
+          kind: added
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-11-04T07:07:58.960201277Z"
+    description: k8s-store Helm Chart that creates a SecretStore for local namespace
+      in local kubernetes cluster
+    digest: c354e321bb4506bd6d40c4bb3a837c97d6271f633dd5d1010bb0f2c4059602b1
+    name: k8s-store
+    type: application
+    urls:
+    - k8s-store-1.0.0.tgz
+    version: 1.0.0
   pg-cluster:
   - annotations:
       artifacthub.io/changes: |
@@ -90,4 +106,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2024-11-01T08:20:55.530181654Z"
+generated: "2024-11-04T07:07:58.960218178Z"
