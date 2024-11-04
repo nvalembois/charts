@@ -1,0 +1,11 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Objects name",
+            "default": "{{ .Release.Name }}"
+        }
+    }
+}
