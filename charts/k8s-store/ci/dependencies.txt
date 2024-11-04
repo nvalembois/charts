@@ -1,0 +1,1 @@
+https://github.com/external-secrets/external-secrets/releases/download/v0.10.5/external-secrets.yaml
