@@ -84,6 +84,25 @@ entries:
   project:
   - annotations:
       artifacthub.io/changes: |
+        - description: Ajout de la création d'un SecretStore k8s-store
+          kind: added
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-11-05T07:48:29.47280676Z"
+    dependencies:
+    - condition: k8s-store.create
+      name: k8s-store
+      repository: https://nvalembois.github.io/charts
+      version: 1.0.0
+    description: project Helm Chart that deploys a pg-cluster
+    digest: 0b05a2db54218d5f819324ed1e00ba7b7221d507d7caf85e5fcc3520babf4242
+    name: project
+    type: application
+    urls:
+    - project-1.0.2.tgz
+    version: 1.0.2
+  - annotations:
+      artifacthub.io/changes: |
         - description: Correction de l'URL de ce dépôt dans les sources de projet
           kind: fixed
     apiVersion: v2
@@ -106,4 +125,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2024-11-04T07:07:58.960218178Z"
+generated: "2024-11-05T07:48:29.472824493Z"
