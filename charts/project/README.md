@@ -13,6 +13,12 @@ A chart to create namespace, argo-cd project and applications for a project.
 | `namespace.podSecurity.warn`    | The warning level for pod security      | `restricted` |
 | `namespace.podSecurity.enforce` | The enforcement level for pod security  | `restricted` |
 
+### k8s-store
+
+| Name               | Description                           | Value   |
+| ------------------ | ------------------------------------- | ------- |
+| `k8s-store.create` | Specify whether to create a k8s-store | `false` |
+
 ### ArgoCD Project
 
 | Name                                   | Description                                                | Value                          |

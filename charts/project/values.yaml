@@ -14,6 +14,11 @@ namespace:
     warn: restricted
     enforce: restricted
 
+## @section k8s-store
+## @param k8s-store.create Specify whether to create a k8s-store
+k8s-store:
+  create: false
+
 ## ArgoCD Project Configuration
 ## @section ArgoCD Project
 ## @param argocdNamespace The namespace where ArgoCD is installed
