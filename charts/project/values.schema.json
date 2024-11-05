@@ -32,6 +32,16 @@
                 }
             }
         },
+        "k8s-store": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Specify whether to create the k8s-store SecretStore",
+                    "default": true
+                }
+            }
+        },
         "argocdNamespace": {
             "type": "string",
             "description": "The namespace where ArgoCD is installed",
