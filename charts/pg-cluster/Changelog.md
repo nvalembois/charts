@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2] - 2024-11-06
+
+### Fixed
+
+- Service update strategy
+
 ## [1.0.1] - 2024-10-31
 
 ### Added

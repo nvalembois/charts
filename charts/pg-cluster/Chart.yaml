@@ -3,13 +3,11 @@ apiVersion: v2
 name: pg-cluster
 description: pg-cluster Helm Chart that creates CloudnativePG Postgres Cluster 
 type: application
-version: 1.0.1
+version: 1.0.2
 appVersion: 1.0.0
 
 annotations:
   artifacthub.io/changes: |
-    - description: Ajout d'un service ayant le nom de la database qui pointe vers l'instance rw
-      kind: added
-    - description: Correction du README
+    - description: Service update strategy
       kind: fixed
 
