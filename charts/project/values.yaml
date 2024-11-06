@@ -150,5 +150,31 @@ permitOnlyProjectScopedClusters: false
 ## @param sourceNamespaces [array] Array of source namespaces for the project
 sourceNamespaces: []
 
-## @param dependencies [array] Array of project dependencies
+## @section Applications
+## @param dependencies [array] Array of project applications
 dependencies: []
+
+## @section Applications Defaults
+applicationDefaults:
+  syncPolicy:
+    automated:
+## @param applicationDefaults.syncPolicy.automated.selfHeal [] [Automatic Self-Healing](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/#automatic-self-healing)
+      selfHeal: true
+## @param applicationDefaults.syncPolicy.automated.prune [] [Automatic Pruning](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/#automatic-pruning)
+      prune: true
+    retry:
+      backoff:
+## @param applicationDefaults.syncPolicy.retry.backoff.duration Sync retry backoff base duration
+        duration: 5s
+## @param applicationDefaults.syncPolicy.retry.backoff.factor Factor multiplies the base duration after each failed sync retry
+        factor: 2
+## @param applicationDefaults.syncPolicy.retry.backoff.maxDuration Max sync retry backoff duration
+        maxDuration: 3m0s
+## @param applicationDefaults.syncPolicy.retry.limit Max number of allowed sync retries
+      limit: 2
+## @param applicationDefaults.syncPolicy.syncOptions [array] [Sync Options](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/#sync-options)
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - PruneLast=true
+    - ServerSideApply=true
+    - RespectIgnoreDifferences=true

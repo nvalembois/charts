@@ -40,4 +40,21 @@ A chart to create namespace, argo-cd project and applications for a project.
 | `syncWindows`                          | Sync windows for the project                               | `[]`                           |
 | `permitOnlyProjectScopedClusters`      | Restrict to project-scoped clusters only                   | `false`                        |
 | `sourceNamespaces`                     | Array of source namespaces for the project                 | `[]`                           |
-| `dependencies`                         | Array of project dependencies                              | `[]`                           |
+
+### Applications
+
+| Name           | Description                   | Value |
+| -------------- | ----------------------------- | ----- |
+| `dependencies` | Array of project applications | `[]`  |
+
+### Applications Defaults
+
+| Name                                                       | Description                                                                                                     | Value  |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------ |
+| `applicationDefaults.syncPolicy.automated.selfHeal`        | [Automatic Self-Healing](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/#automatic-self-healing) | `true` |
+| `applicationDefaults.syncPolicy.automated.prune`           | [Automatic Pruning](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/#automatic-pruning)           | `true` |
+| `applicationDefaults.syncPolicy.retry.backoff.duration`    | Sync retry backoff base duration                                                                                | `5s`   |
+| `applicationDefaults.syncPolicy.retry.backoff.factor`      | Factor multiplies the base duration after each failed sync retry                                                | `2`    |
+| `applicationDefaults.syncPolicy.retry.backoff.maxDuration` | Max sync retry backoff duration                                                                                 | `3m0s` |
+| `applicationDefaults.syncPolicy.retry.limit`               | Max number of allowed sync retries                                                                              | `2`    |
+| `applicationDefaults.syncPolicy.syncOptions`               | [Sync Options](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/#sync-options)                  | `[]`   |
