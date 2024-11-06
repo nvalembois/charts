@@ -3,7 +3,7 @@ apiVersion: v2
 name: project
 description: project Helm Chart that deploys a pg-cluster
 type: application
-version: 1.0.2
+version: 1.0.3
 appVersion: 1.0.0
 
 dependencies:
@@ -14,6 +14,6 @@ dependencies:
 
 annotations:
   artifacthub.io/changes: |
-    - description: Ajout de la création d'un SecretStore k8s-store
+    - description: Variabilisation de la `syncPolicy` des `Applications`
       kind: added
 

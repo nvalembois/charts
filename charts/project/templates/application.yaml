@@ -1,5 +1,6 @@
-{{- range .Values.dependencies }}
-{{- if not (default false .disabled) }}
+{{- range .Values.dependencies -}}
+{{- if not (default false .disabled) -}}
+{{- $syncPolicy := mergeOverwrite (deepCopy $.Values.applicationDefaults.syncPolicy) (.syncPolicy | default dict) }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -36,20 +37,6 @@ spec:
   {{- with .ignoreDifferences }}
   ignoreDifferences: {{ toYaml . | nindent 4 }}
   {{- end }}
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
-    retry:
-      backoff:
-        duration: 5s
-        factor: 2
-        maxDuration: 3m0s
-      limit: 2
-    syncOptions:
-    - ApplyOutOfSyncOnly=true
-    - PruneLast=true
-    - ServerSideApply=true
-    - RespectIgnoreDifferences=true
+  syncPolicy: {{ toYaml $syncPolicy | nindent 4 }}
 {{- end }}
 {{- end }}
