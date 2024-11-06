@@ -57,6 +57,20 @@ entries:
   pg-cluster:
   - annotations:
       artifacthub.io/changes: |
+        - description: Service update strategy
+          kind: fixed
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-11-06T21:08:19.028859625Z"
+    description: pg-cluster Helm Chart that creates CloudnativePG Postgres Cluster
+    digest: f458026f6ed963e06a5f6666b92a54220cd8e05812945c9d9d77fccb6f329f60
+    name: pg-cluster
+    type: application
+    urls:
+    - pg-cluster-1.0.2.tgz
+    version: 1.0.2
+  - annotations:
+      artifacthub.io/changes: |
         - description: Ajout d'un service ayant le nom de la database qui pointe vers l'instance rw
           kind: added
         - description: Correction du README
@@ -144,4 +158,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2024-11-06T20:50:51.350819126Z"
+generated: "2024-11-06T21:08:19.028879302Z"
