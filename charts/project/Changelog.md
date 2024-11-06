@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.3] - 2024-11-06
+
+### Added
+
+- Variabilisation de la `syncPolicy` des `Applications`
+
+## [1.0.2] - 2024-11-02
+
+### Added
+
+- Ajout de la création d'un `SecretStore` `k8s-store`
+
 ## [1.0.1] - 2024-10-31
 
 ### Added
