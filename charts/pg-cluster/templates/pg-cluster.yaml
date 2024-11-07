@@ -19,7 +19,7 @@ spec:
             name: {{ $globalPg.host | default .Values.host | quote  }}
           spec:
             type: LoadBalancer
-          updateStrategy: patch
+        updateStrategy: patch
 
   # Allow a node maintenace with database interruption
   nodeMaintenanceWindow:
