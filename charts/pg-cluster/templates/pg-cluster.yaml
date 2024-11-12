@@ -21,8 +21,7 @@ spec:
             type: LoadBalancer
         updateStrategy: patch
 
-  # Allow a node maintenace with database interruption
-  nodeMaintenanceWindow:
+  nodeMaintenanceWindow: # Allow a node maintenace with database interruption
     inProgress: true
     reusePVC: true
 
