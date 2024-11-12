@@ -23,7 +23,7 @@ jobs:
         fetch-depth: 1
     - name: Get charts changed
       id: changed-charts
-      uses: tj-actions/changed-files@v45.0.3
+      uses: tj-actions/changed-files@v45.0.4
       with:
         dir_names: true
         dir_names_max_depth: 1
