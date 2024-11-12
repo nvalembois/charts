@@ -61,6 +61,20 @@ entries:
           kind: fixed
     apiVersion: v2
     appVersion: 1.0.0
+    created: "2024-11-12T18:26:02.70193793Z"
+    description: pg-cluster Helm Chart that creates CloudnativePG Postgres Cluster
+    digest: b9c7cf4ac3a9fd95deca0173a4cbd33cc1ac3146b91a5f4d85f01557be89de18
+    name: pg-cluster
+    type: application
+    urls:
+    - pg-cluster-1.0.3.tgz
+    version: 1.0.3
+  - annotations:
+      artifacthub.io/changes: |
+        - description: Service update strategy
+          kind: fixed
+    apiVersion: v2
+    appVersion: 1.0.0
     created: "2024-11-06T21:08:19.028859625Z"
     description: pg-cluster Helm Chart that creates CloudnativePG Postgres Cluster
     digest: f458026f6ed963e06a5f6666b92a54220cd8e05812945c9d9d77fccb6f329f60
@@ -158,4 +172,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2024-11-06T21:08:19.028879302Z"
+generated: "2024-11-12T18:26:02.701993074Z"
