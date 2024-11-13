@@ -9,11 +9,11 @@ appVersion: 1.0.0
 dependencies:
   - name: k8s-store
     repository: https://nvalembois.github.io/charts
-    version: 1.0.0
+    version: 1.0.1
     condition: k8s-store.create
 
 annotations:
   artifacthub.io/changes: |
-    - description: Variabilisation de la `syncPolicy` des `Applications`
-      kind: added
+    - description: k8s-store v1.0.1 pour permettre de sépcifier le namespace
+      kind: fix
 
