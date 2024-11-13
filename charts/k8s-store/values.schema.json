@@ -1,11 +1,14 @@
 {
     "title": "Chart Values",
     "type": "object",
-    "properties": {
-        "name": {
-            "type": "string",
-            "description": "Objects name",
-            "default": "{{ .Release.Name }}"
-        }
+    "namespace": {
+        "type": "string",
+        "description": "Objects namespace",
+        "default": "{{ .Release.Namespace }}"
+    },
+    "name": {
+        "type": "string",
+        "description": "Objects name",
+        "default": "{{ .Release.Name }}"
     }
 }
