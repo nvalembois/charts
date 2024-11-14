@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2] - 2024-11-14
+
+### Fixed
+
+- Remote Namespace
+
 ## [1.0.1] - 2024-11-13
 
 ### Added
