@@ -9,7 +9,7 @@ appVersion: 1.0.0
 dependencies:
   - name: k8s-store
     repository: https://nvalembois.github.io/charts
-    version: 1.0.1
+    version: 1.0.0
     condition: k8s-store.create
 
 annotations:
