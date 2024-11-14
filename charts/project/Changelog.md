@@ -1,11 +1,5 @@
 # Changelog
 
-## [1.0.4] - 2024-11-13
-
-### Added
-
-- `k8s-store` v1.0.1 pour permettre de sépcifier le namespace
-
 ## [1.0.3] - 2024-11-06
 
 ### Added

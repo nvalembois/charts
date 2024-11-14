@@ -14,6 +14,6 @@ dependencies:
 
 annotations:
   artifacthub.io/changes: |
-    - description: k8s-store v1.0.1 pour permettre de sépcifier le namespace
-      kind: fix
+    - description: Variabilisation de la `syncPolicy` des `Applications`
+      kind: added
 
