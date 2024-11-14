@@ -43,7 +43,7 @@
       },
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/nvalembois/charts/refs/tags/k8s-store-1.0.0/charts/k8s-store/values.schema.json"
+          "$ref": "https://raw.githubusercontent.com/nvalembois/charts/refs/tags/k8s-store-1.0.1/charts/k8s-store/values.schema.json"
         }
       ]
     },
