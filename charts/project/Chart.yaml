@@ -3,17 +3,17 @@ apiVersion: v2
 name: project
 description: project Helm Chart that deploys a pg-cluster
 type: application
-version: 1.0.4
+version: 1.0.5
 appVersion: 1.0.0
 
 dependencies:
   - name: k8s-store
     repository: https://nvalembois.github.io/charts
-    version: 1.0.1
+    version: 1.0.2
     condition: k8s-store.create
 
 annotations:
   artifacthub.io/changes: |
-    - description: k8s-store v1.0.1
+    - description: k8s-store v1.0.2
       kind: fixed
 

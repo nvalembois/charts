@@ -18,6 +18,7 @@ namespace:
 ## @param k8s-store.create Specify whether to create a k8s-store
 k8s-store:
   create: false
+  name: k8s-store
 
 ## ArgoCD Project Configuration
 ## @section ArgoCD Project
