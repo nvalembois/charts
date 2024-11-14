@@ -3,7 +3,7 @@ apiVersion: v2
 name: k8s-store
 description: k8s-store Helm Chart that creates a SecretStore for local namespace in local kubernetes cluster
 type: application
-version: 1.0.2
+version: 1.0.3
 appVersion: 1.0.0
 
 annotations:

@@ -11,4 +11,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ include "name" . | quote  }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "namespace" . | quote  }}
