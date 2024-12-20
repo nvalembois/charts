@@ -1,12 +1,11 @@
 {{- $size := .Values.size  -}}
 {{- $walSize := .Values.walsize | default $size -}}
-{{- $globalPg := dig "global" "postgresql" (dict) ( .Values | toJson | fromJson) -}}
 ---
 # https://cloudnative-pg.io/documentation/1.19/api_reference/#Cluster
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: {{ $globalPg.host | default .Values.host | quote  }}
+  name: {{ include "host" . | quote }}
 spec:
   instances: {{ .Values.instances }}
 
@@ -16,7 +15,7 @@ spec:
       - selectorType: rw
         serviceTemplate:
           metadata:
-            name: {{ $globalPg.host | default .Values.host | quote  }}
+            name: {{ include "host" . | quote }}
           spec:
             type: LoadBalancer
         updateStrategy: patch
@@ -58,5 +57,5 @@ spec:
 
   bootstrap:
     initdb:
-      database: {{ $globalPg.database | default .Values.database | quote  }}
-      owner: {{ $globalPg.username | default .Values.username | quote  }}
+      database: {{ include "database" . | quote }}
+      owner: {{ include "username" . | quote }}
