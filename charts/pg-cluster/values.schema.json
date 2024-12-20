@@ -31,5 +31,43 @@
             "description": "DB username",
             "default": "db-user"
         }
+    },
+    "cnpg": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "description": "Namespace for cnpg",
+          "default": "cnpg-system"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name for the cnpg",
+          "default": "cloudnative-pg"
+        },
+        "instance": {
+          "type": ["string", "null"],
+          "description": "Instance name for cnpg",
+          "default": null
+        }
+      }
+    },
+    "networkpolicy": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable or disable network policy",
+          "default": false
+        },
+        "from": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "List of network sources",
+          "default": []
+        }
+      }
     }
 }

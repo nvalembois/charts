@@ -12,3 +12,13 @@ host: postgres
 database: db
 ## @param username User with full access to database (can be overridden by global.postgresql.username)
 username: db-user
+
+cnpg:
+  namespace: cnpg-system
+  name: cloudnative-pg
+  instance: null
+
+networkpolicy:
+##@param networkpolicy.enabled 
+  enabled: false
+  from: []
