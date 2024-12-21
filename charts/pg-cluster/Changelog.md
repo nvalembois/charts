@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.4] - 2024-12-21
+
+### Added
+
+- Ajout de la gestion d'une network policyS
+
 ## [1.0.3] - 2024-11-12
 
 ### Fixed
