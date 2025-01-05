@@ -101,6 +101,18 @@ entries:
     version: 1.0.0
   pg-cluster:
   - annotations:
+      artifacthub.io/changes: "- description: fix: network policy \n  kind: fix\n"
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-01-05T18:08:16.148237801Z"
+    description: pg-cluster Helm Chart that creates CloudnativePG Postgres Cluster
+    digest: c282a73b3d034a6ac17b55df90eee7a4c6795a127207d5e4cc0b7aaef92481a3
+    name: pg-cluster
+    type: application
+    urls:
+    - pg-cluster-1.0.5.tgz
+    version: 1.0.5
+  - annotations:
       artifacthub.io/changes: "- description: feat: network policy \n  kind: add\n"
     apiVersion: v2
     appVersion: 1.0.0
@@ -286,4 +298,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2024-12-21T09:21:23.224613778Z"
+generated: "2025-01-05T18:08:16.148298895Z"
