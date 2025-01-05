@@ -11,7 +11,7 @@ spec:
   {{- if .Values.networkpolicy.from }}
   - from: {{ toYaml .Values.networkpolicy.from | nindent 4 }}
     ports:
-    - port: 8080
+    - port: 5432
       protocol: TCP
   {{- end }}
   - from:
