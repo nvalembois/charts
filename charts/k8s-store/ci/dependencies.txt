@@ -1,1 +1,1 @@
-https://github.com/external-secrets/external-secrets/releases/download/v0.10.5/external-secrets.yaml
+https://github.com/external-secrets/external-secrets/releases/download/v0.18.2/external-secrets.yaml
