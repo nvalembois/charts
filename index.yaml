@@ -196,6 +196,25 @@ entries:
   project:
   - annotations:
       artifacthub.io/changes: |
+        - description: k8s-store v1.0.4
+          kind: fixed
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-07-25T06:18:58.425396777Z"
+    dependencies:
+    - condition: k8s-store.create
+      name: k8s-store
+      repository: https://nvalembois.github.io/charts
+      version: 1.0.4
+    description: project Helm Chart that deploys a pg-cluster
+    digest: 37ac9fe953370c33b13a81e6ee72d57b6245ee22645799693b855e88d3eb21bb
+    name: project
+    type: application
+    urls:
+    - project-1.0.7.tgz
+    version: 1.0.7
+  - annotations:
+      artifacthub.io/changes: |
         - description: k8s-store v1.0.3
           kind: fixed
     apiVersion: v2
@@ -313,4 +332,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2025-07-25T06:06:48.654959848Z"
+generated: "2025-07-25T06:18:58.425444577Z"
