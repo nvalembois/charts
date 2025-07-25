@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.4] - 2025-07-24
+
+### Fixed
+
+- SecrteStore version
+
 ## [1.0.3] - 2024-11-14
 
 ### Fixed
