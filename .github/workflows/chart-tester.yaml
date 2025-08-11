@@ -18,7 +18,7 @@ jobs:
     steps:
     # Checkout le code du repository
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 1
     - name: Get charts changed
@@ -45,7 +45,7 @@ jobs:
     steps:
     # Checkout le code du repository
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       timeout-minutes: 5
       with:
         fetch-depth: 1
