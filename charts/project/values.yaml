@@ -25,8 +25,14 @@ k8s-store:
 ## @param argocdNamespace The namespace where ArgoCD is installed
 argocdNamespace: default
 
+## @param projectRepoURL The project repoUrl
+projectRepoURL: https://github.com/NValembois/argo-main.git
+
+## @param projectRepoPath The project path in the project repo
+projectRepoPath: /
+
 ## @param description A description for the project, using Helm template syntax
-description: "Projet '{{ $.Values.name }}'"
+description: Projet '{{ include "name" .}}'
 
 ## Additional source repositories
 ## @param additionalSourceRepos Additional source repositories for the project
@@ -53,12 +59,6 @@ destinations:
 ## @param clusterResourceWhitelist [array] Array of cluster resources allowed for the project
 additionalClusterResourceWhitelist: []
 clusterResourceWhitelist: []
-
-## Namespace resource blacklist
-## @param additionalNamespaceResourceBlacklist Additional namespace resources blacklisted for the project
-## @param namespaceResourceBlacklist [array] Array of namespace resources blacklisted for the project
-additionalNamespaceResourceBlacklist: []
-namespaceResourceBlacklist: []
 
 ## Namespace resource whitelist
 ## @param additionalNamespaceResourceWhitelist [array] Additional namespace resources whitelisted for the project

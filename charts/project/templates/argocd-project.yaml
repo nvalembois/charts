@@ -1,50 +1,38 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: {{ include "name" . | quote }}
-  namespace: {{ tpl (toYaml .Values.argocdNamespace) . | quote }}
+  name: {{ include "name" $ | quote }}
+  namespace: {{ tpl (toYaml .Values.argocdNamespace) $ | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  description: {{ tpl (toYaml .Values.description) . | quote }}
+  description: {{ tpl (toYaml .Values.description) $ | quote }}
   {{- with (concat .Values.sourceRepos .Values.additionalSourceRepos) }}
-  sourceRepos: {{- tpl (toYaml .) . | nindent 2 }}
+  sourceRepos: {{- tpl (toYaml .) $ | nindent 2 }}
   {{- end }}
   destinations:
   {{- range .Values.destinations }}
-  - namespace: {{ .namespace | default $.Values.name | quote }}
-    {{- with .server }}
-    server: {{ tpl (toYaml .) . | quote }}
-    {{- end }}
-    {{- with .name }}
-    name: {{ tpl (toYaml .) . | quote }}
-    {{- end }}
+  - {{ include "destination" (dict "dest" . "root" $) | nindent 4 }}
   {{- end }}
   {{- range .Values.additionalDestinations }}
-  - namespace: {{ .namespace | default $.Values.name | quote }}
-    {{- with .server }}
-    server: {{ tpl (toYaml .) . | quote }}
-    {{- end }}
-    {{- with .name }}
-    name: {{ tpl (toYaml .) . | quote }}
-    {{- end }}
+  - {{ include "destination" (dict "dest" . "root" $) | nindent 4 }}
   {{- end }}
   {{- with (concat .Values.clusterResourceWhitelist .Values.additionalClusterResourceWhitelist) }}
-  clusterResourceWhitelist: {{- tpl (toYaml .) . | nindent 2 }}
+  clusterResourceWhitelist: {{- tpl (toYaml .) $ | nindent 2 }}
   {{- end }}
   {{- with (concat .Values.namespaceResourceWhitelist .Values.additionalNamespaceResourceWhitelist) }}
-  namespaceResourceWhitelist: {{- tpl (toYaml .) . | nindent 2 }}
+  namespaceResourceWhitelist: {{- tpl (toYaml .) $ | nindent 2 }}
   {{- end }}
   orphanedResources:
     warn: {{ .Values.orphanedResources.warn }}
   {{- with .Values.roles }}
-  roles: {{- tpl (toYaml .) . | nindent 2 }}
+  roles: {{- tpl (toYaml .) $ | nindent 2 }}
   {{- end }}
   {{- with .Values.syncWindows }}
-  syncWindows: {{- tpl (toYaml .) . | nindent 2 }}
+  syncWindows: {{- tpl (toYaml .) $ | nindent 2 }}
   {{- end }}
   permitOnlyProjectScopedClusters: {{ .Values.permitOnlyProjectScopedClusters }}
   {{- with .Values.sourceNamespaces }}
-  sourceNamespaces: {{- tpl (toYaml .) . | nindent 2 }}
+  sourceNamespaces: {{- tpl (toYaml .) $ | nindent 2 }}
   {{- end }}
   

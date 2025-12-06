@@ -6,34 +6,36 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ .alias | default .name | quote }}
-  namespace: kube-argo-cd
+  namespace: '{{ .Values.argocdNamespace }}'
+  {{- if not (default false .addFinalizer) -}}
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
+  {{- end }}
 spec:
   destination:
     name: in-cluster
     namespace: {{ $.Values.name | quote }}
   project: {{ $.Values.name | quote }}
   sources:
-  {{- if .name }}
-  - repoURL: https://github.com/NValembois/argo-main.git
-    targetRevision: HEAD
-    ref: self
-  {{- end }}
-  {{- with .additionnalSources }}
-  {{- toYaml .  | nindent 2 }}
-  {{- end }}
-  - repoURL: {{ .repository | quote }}
-    targetRevision: {{ .version | quote }}
-    {{- with .name }}
-    chart: {{ quote . }}
+    {{- if .name }}
+    - repoURL: {{ $.Values.projectRepoURL }}
+      targetRevision: HEAD
+      ref: self
     {{- end }}
-    {{- with .path }}
-    path: {{ quote . }}
+    {{- with .additionnalSources }}
+    {{- tpl (toYaml .) . | nindent 2 }}
     {{- end }}
-    {{- with .helm }}
-    helm: {{ toYaml . | nindent 6 }}
-    {{- end }}
+    - repoURL: {{ .repository | quote }}
+      targetRevision: {{ .version | quote }}
+      {{- with .name }}
+      chart: {{ tpl . $ | quote }}
+      {{- end }}
+      {{- with .path }}
+      path: {{ tpl . $ | quote }}
+      {{- end }}
+      {{- with .helm }}
+      helm: {{ toYaml . | nindent 6 }}
+      {{- end }}
   {{- with .ignoreDifferences }}
   ignoreDifferences: {{ toYaml . | nindent 4 }}
   {{- end }}

@@ -52,6 +52,16 @@
       "description": "The namespace where ArgoCD is installed",
       "default": "kube-argo-cd"
     },
+    "projectRepoURL": {
+      "type": "string",
+      "description": "The project repoUrl",
+      "default": "https://github.com/NValembois/argo-main.git"
+    },
+    "projectRepoPath": {
+      "type": "string",
+      "description": "The project path in the project repo",
+      "default": "/"
+    },
     "description": {
       "type": "string",
       "description": "A description for the project, using Helm template syntax",
@@ -136,46 +146,6 @@
     "clusterResourceWhitelist": {
       "type": "array",
       "description": "Array of cluster resources allowed for the project",
-      "default": "[]",
-      "items": {
-        "type": "object",
-        "properties": {
-          "group": {
-            "type": "string",
-            "description": "The group of the resource",
-            "default": ""
-          },
-          "kind": {
-            "type": "string",
-            "description": "The kind of the resource",
-            "default": ""
-          }
-        }
-      }
-    },
-    "additionalNamespaceResourceBlacklist": {
-      "type": "array",
-      "description": "Additional namespace resources blacklisted for the project",
-      "default": [],
-      "items": {
-        "type": "object",
-        "properties": {
-          "group": {
-            "type": "string",
-            "description": "The group of the resource",
-            "default": ""
-          },
-          "kind": {
-            "type": "string",
-            "description": "The kind of the resource",
-            "default": ""
-          }
-        }
-      }
-    },
-    "namespaceResourceBlacklist": {
-      "type": "array",
-      "description": "Array of namespace resources blacklisted for the project",
       "default": "[]",
       "items": {
         "type": "object",
@@ -333,6 +303,11 @@
               "type": "string"
             }
           }
+          },
+          "addFinalizer": {
+            "type": "boolean",
+            "description": "Add argocd resources-finalzer to argocd application",
+            "default": true
           },
           "syncPolicy": {
             "type":"object",
