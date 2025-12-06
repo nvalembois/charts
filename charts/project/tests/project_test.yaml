@@ -224,27 +224,27 @@ tests:
           value: false
       - notExists:
           path: spec.sourceNamespaces
-  - it: should use additional values
+  - it: should use additional values and templating
     set:
       additionalSourceRepos:
-        - 'additionalSourceRepos-{{ .Release.Name }}'
+        - additionalSourceRepos-{{ .Release.Name }}
       additionnalDestinations:
-        - server: server
-        - name: name
-        - server: serverName
-          name: nameServer
+        - server: server-{{ .Release.Name }}
+        - name: name-{{ .Release.Name }}
+        - server: serverName-{{ .Release.Name }}
+          name: nameServer-{{ .Release.Name }}
       additionalClusterResourceWhitelist:
-        - group: additionalClusterResourceWhitelist
-          kind: additionalClusterResourceWhitelist
+        - group: additionalClusterResourceWhitelist-group-{{ .Release.Name }}
+          kind: additionalClusterResourceWhitelist-kind-{{ .Release.Name }}
       additionalNamespaceResourceWhitelist:
-        - group: additionalNamespaceResourceWhitelist
-          kind: additionalNamespaceResourceWhitelist
+        - group: additionalNamespaceResourceWhitelist-group-{{ .Release.Name }}
+          kind: additionalNamespaceResourceWhitelist-kind-{{ .Release.Name }}
       roles:
-        - roles
+        - roles-{{ .Release.Name }}
       syncWindows:
-        - syncWindows
+        - syncWindows-{{ .Release.Name }}
       sourceNamespaces:
-        - sourceNamespaces
+        - sourceNamespaces-{{ .Release.Name }}
     asserts:
       - isKind:
           of: AppProject
@@ -279,12 +279,32 @@ tests:
             server: https://kubernetes.default.svc
             name: in-cluster
             namespace: test-release
-          count: 1
+      - contains:
+          path: spec.destinations
+          content:
+            namespace: test-release
+            server: server-test-release
+      - contains:
+          path: spec.destinations
+          content:
+            namespace: test-release
+            name: name-test-release
+      - contains:
+          path: spec.destinations
+          content:
+            namespace: test-release
+            server: serverName-test-release
+            name: nameServer-test-release
+      - lengthEqual:
+          path: spec.destinations
+          count: 4
       - contains:
           path: spec.clusterResourceWhitelist
           content:
-            group: additionalClusterResourceWhitelist
-            kind: additionalClusterResourceWhitelist
+            group: additionalClusterResourceWhitelist-group-test-release
+            kind: additionalClusterResourceWhitelist-kind-test-release
+      - lengthEqual:
+          path: spec.clusterResourceWhitelist
           count: 1
       - contains:
           path: spec.namespaceResourceWhitelist
@@ -454,8 +474,8 @@ tests:
       - contains:
           path: spec.namespaceResourceWhitelist
           content:
-            group: additionalNamespaceResourceWhitelist
-            kind: additionalNamespaceResourceWhitelist
+            group: additionalNamespaceResourceWhitelist-group-test-release
+            kind: additionalNamespaceResourceWhitelist-kind-test-release
       - lengthEqual:
           path: spec.namespaceResourceWhitelist
           count: 34
@@ -464,16 +484,99 @@ tests:
           value: false
       - contains:
           path: spec.roles
-          content: 'roles'
+          content: roles-test-release
+      - lengthEqual:
+          path: spec.roles
           count: 1
       - contains:
           path: spec.syncWindows
-          content: 'syncWindows'
+          content: syncWindows-test-release
+      - lengthEqual:
+          path: spec.syncWindows
           count: 1
       - equal:
           path: spec.permitOnlyProjectScopedClusters
           value: false
       - contains:
           path: spec.sourceNamespaces
-          content: 'sourceNamespaces'
+          content: sourceNamespaces-test-release
+      - lengthEqual:
+          path: spec.sourceNamespaces
           count: 1
+  - it: should conform to overrides and templating
+    set:
+      argocdNamespace: argocdNamespace-{{ .Release.Name }}
+      projectRepoURL: projectRepoURL-{{ .Release.Name }}
+      projectRepoPath: projectRepoPath-{{ .Release.Name }}
+      description: description-{{ .Release.Name }}
+      sourceRepos:
+        - sourceRepos-{{ .Release.Name }}
+      destinations:
+        - server: destinations-server-{{ .Release.Name }}
+          name: destinations-name-{{ .Release.Name }}
+          namespace: destinations-namespace-{{ .Release.Name }}
+      namespaceResourceWhitelist:
+        - group: namespaceResourceWhitelist-group-{{ .Release.Name }}
+          kind: namespaceResourceWhitelist-kind-{{ .Release.Name }}
+      orphanedResources:
+        warn: true
+      permitOnlyProjectScopedClusters: true
+    asserts:
+      - isKind:
+          of: AppProject
+      - equal:
+          path: metadata.name
+          value: test-release
+      - equal:
+          path: metadata.namespace
+          value: argocdNamespace-test-release
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+          count: 1
+      - lengthEqual:
+          path: metadata.finalizers
+          count: 1
+      - equal:
+          path: spec.description
+          value: description-test-release
+      - contains:
+          path: spec.sourceRepos
+          content: sourceRepos-test-release
+          count: 1
+      - lengthEqual:
+          path: spec.sourceRepos
+          count: 1
+      - contains:
+          path: spec.destinations
+          content:
+            server: destinations-server-test-release
+            name: destinations-name-test-release
+            namespace: destinations-namespace-test-release
+          count: 1
+      - lengthEqual:
+          path: spec.destinations
+          count: 1
+      - notExists:
+          path: clusterResourceWhitelist
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: namespaceResourceWhitelist-group-test-release
+            kind: namespaceResourceWhitelist-kind-test-release
+          count: 1
+      - lengthEqual:
+          path: spec.namespaceResourceWhitelist
+          count: 1
+      - equal:
+          path: spec.orphanedResources.warn
+          value: true
+      - notExists:
+          path: spec.roles
+      - notExists:
+          path: spec.syncWindows
+      - equal:
+          path: spec.permitOnlyProjectScopedClusters
+          value: true
+      - notExists:
+          path: spec.sourceNamespaces

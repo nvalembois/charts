@@ -7,15 +7,15 @@
 {{- end -}}
 
 {{- define "destination" -}}
-{{- if .dest.namespace | default false }}
-namespace: {{ tpl (toYaml .dest.namespace) .root | quote }}
+{{- if .params.namespace | default false }}
+namespace: {{ tpl (toYaml .params.namespace) $ | quote }}
 {{- else }}
-namespace: {{ include "name" .root | quote }}
+namespace: {{ include "name" $ | quote }}
 {{- end }}
-{{- if .dest.server }}
-server: {{ tpl (toYaml .dest.server) .root | quote }}
+{{- with .params.server }}
+server: {{ tpl (toYaml .) $ | quote }}
 {{- end }}
-{{- if .dest.name }}
-name: {{ tpl (toYaml .dest.name) .root | quote }}
+{{- with .params.name }}
+name: {{ tpl (toYaml .) $ | quote }}
 {{- end }}
 {{- end -}}
