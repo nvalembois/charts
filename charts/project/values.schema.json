@@ -87,121 +87,37 @@
       "type": "array",
       "description": "Array of additional destinations allowed for the project",
       "default": "[]",
-      "items": {
-        "type": "object",
-        "properties": {
-          "server": {
-            "type": "string",
-            "description": "The url of the destination cluster",
-            "default": ""
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the destination cluster",
-            "default": ""
-          }
-        }
-      }
+      "items": { "$ref": "#/$defs/destination"}
     },
     "destinations": {
       "type": "array",
       "description": "Array of destinations allowed for the project",
       "default": "[]",
-      "items": {
-        "type": "object",
-        "properties": {
-          "server": {
-            "type": "string",
-            "description": "The url of the destination cluster",
-            "default": ""
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the destination cluster",
-            "default": ""
-          }
-        }
-      }
+      "items": { "$ref": "#/$defs/destination"}
     },
     "additionalClusterResourceWhitelist": {
       "type": "array",
       "description": "Additional cluster resources allowed for the project",
       "default": [],
-      "items": {
-        "type": "object",
-        "properties": {
-          "group": {
-            "type": "string",
-            "description": "The group of the resource",
-            "default": ""
-          },
-          "kind": {
-            "type": "string",
-            "description": "The kind of the resource",
-            "default": ""
-          }
-        }
-      }
+      "items": { "$ref": "#/$defs/resource"}
     },
     "clusterResourceWhitelist": {
       "type": "array",
       "description": "Array of cluster resources allowed for the project",
       "default": "[]",
-      "items": {
-        "type": "object",
-        "properties": {
-          "group": {
-            "type": "string",
-            "description": "The group of the resource",
-            "default": ""
-          },
-          "kind": {
-            "type": "string",
-            "description": "The kind of the resource",
-            "default": ""
-          }
-        }
-      }
+      "items": { "$ref": "#/$defs/resource"}
     },
     "additionalNamespaceResourceWhitelist": {
       "type": "array",
       "description": "Additional namespace resources whitelisted for the project",
       "default": "[]",
-      "items": {
-        "type": "object",
-        "properties": {
-          "group": {
-            "type": "string",
-            "description": "The group of the resource",
-            "default": ""
-          },
-          "kind": {
-            "type": "string",
-            "description": "The kind of the resource",
-            "default": ""
-          }
-        }
-      }
+      "items": { "$ref": "#/$defs/resource"}
     },
     "namespaceResourceWhitelist": {
       "type": "array",
       "description": "Array of namespace resources whitelisted for the project",
       "default": "[]",
-      "items": {
-        "type": "object",
-        "properties": {
-          "group": {
-            "type": "string",
-            "description": "The group of the resource",
-            "default": ""
-          },
-          "kind": {
-            "type": "string",
-            "description": "The kind of the resource",
-            "default": ""
-          }
-        }
-      }
+      "items": { "$ref": "#/$defs/resource"}
     },
     "orphanedResources": {
       "type": "object",
@@ -269,162 +185,156 @@
           },
           "helm": {
             "type": "object",
-            "releaseName": {
-              "type": "string",
-              "description": "Release Name for helm dependency"
+            "properties": {
+              "releaseName": {
+                "type": "string",
+                "description": "Release Name for helm dependency"
+              },
+              "valueFiles": {
+                "type": "array",
+                "description": "Value files for helm dependency",
+                "items": {
+                  "type": "string"
+                }
+              }
             },
-            "valueFiles": {
+            "ignoreDifferences": {
               "type": "array",
-              "description": "Value files for helm dependency",
               "items": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "group": { "type": "string" },
+                  "kind": { "type": "string" },
+                  "jqPathExpressions": { 
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
               }
             }
-          },
-          "ignoreDifferences": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "group": { "type": "string" },
-              "kind": { "type": "string" },
-              "jqPathExpressions": { 
-              "type": "array",
-              "items": { "type": "string" }
-            }
-          },
-          "releaseName": {
-            "type": "string",
-            "description": "Release Name for helm dependency"
-          },
-          "valueFiles": {
-            "type": "array",
-            "description": "Value files for helm dependency",
-            "items": {
-              "type": "string"
-            }
-          }
           },
           "addFinalizer": {
             "type": "boolean",
             "description": "Add argocd resources-finalzer to argocd application",
             "default": true
           },
-          "syncPolicy": {
-            "type":"object",
-            "properties": {
-              "automated": {
-                "type":"object",
-                "properties": {
-                  "selfHeal": {
-                    "type":"boolean",
-                    "default": true
-                  },
-                  "prune": {
-                    "type":"boolean",
-                    "default": true
-                  }
-                }
-              },
-              "retry": {
-                "type": "object",
-                "properties": {
-                  "backoff": {
-                    "type": "object",
-                    "properties": {
-                      "duration": {
-                        "type":"string",
-                        "default": "5s"
-                      },
-                      "factor": {
-                        "type":"integer",
-                        "default": 2
-                      },
-                      "maxDuration": {
-                        "type":"string",
-                        "default": "3m0s"
-                      }
-                    },
-                    "limit": {
-                      "type":"integer",
-                      "default": 2
-                    }
-                  }
-                }
-              },
-              "syncOptions": {
-                "type":"array",
-                "default": [
-                  "ApplyOutOfSyncOnly=true",
-                  "PruneLast=true",
-                  "ServerSideApply=true",
-                  "RespectIgnoreDifferences=true"
-                ],
-                "items": {
-                  "type": "string"
-                }
-              }              
-            }
-          }
+          "syncPolicy": {"$ref":"#/$defs/syncPolicy"}
         }
       }
     },
     "applicationDefaults": {
       "type":"object",
       "properties": {
-        "syncPolicy": {
+        "syncPolicy": {"$ref":"#/$defs/syncPolicy"}
+      }
+    }
+  },
+  "$defs": {
+    "destination": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "type": "string",
+          "description": "The url of the destination cluster",
+          "default": ""
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the destination cluster",
+          "default": ""
+        },
+        "namespace": {
+          "type": "string",
+          "description": "The namespace in the destination cluster",
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": [ "server" ] },
+        { "required": [ "name" ] }
+      ]
+    },
+    "resource": {
+      "type": "object",
+      "properties": {
+        "group": {
+          "type": "string",
+          "description": "The group of the resource",
+          "default": ""
+        },
+        "kind": {
+          "type": "string",
+          "description": "The kind of the resource",
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": ["group","kind"]
+    },
+    "syncPolicy":{
+      "type":"object",
+      "properties": {
+        "automated": {
           "type":"object",
           "properties": {
-            "automated": {
-              "type":"object",
-              "properties": {
-                "selfHeal": {
-                  "type":"boolean",
-                  "default": true
-                },
-                "prune": {
-                  "type":"boolean",
-                  "default": true
-                }
-              }
+            "allowEmpty": {
+              "type":"boolean",
+              "default": false
             },
-            "retry": {
+            "enabled": {
+              "type":"boolean"
+            },
+            "selfHeal": {
+              "type":"boolean",
+              "default": true
+            },
+            "prune": {
+              "type":"boolean",
+              "default": true
+            }
+          }
+        },
+        "retry": {
+          "type": "object",
+          "properties": {
+            "backoff": {
               "type": "object",
               "properties": {
-                "backoff": {
-                  "type": "object",
-                  "properties": {
-                    "duration": {
-                      "type":"string",
-                      "default": "5s"
-                    },
-                    "factor": {
-                      "type":"integer",
-                      "default": 2
-                    },
-                    "maxDuration": {
-                      "type":"string",
-                      "default": "3m0s"
-                    }
-                  },
-                  "limit": {
-                    "type":"integer",
-                    "default": 2
-                  }
+                "duration": {
+                  "type":"string",
+                  "default": "5s"
+                },
+                "factor": {
+                  "type":"integer",
+                  "default": 2
+                },
+                "maxDuration": {
+                  "type":"string",
+                  "default": "3m0s"
                 }
               }
             },
-            "syncOptions": {
-              "type":"array",
-              "default": [
-                "ApplyOutOfSyncOnly=true",
-                "PruneLast=true",
-                "ServerSideApply=true",
-                "RespectIgnoreDifferences=true"
-              ],
-              "items": {
-                "type": "string"
-              }
-            }              
+            "limit": {
+              "type":"integer",
+              "default": 2
+            },
+            "refresh": {
+              "type":"integer",
+              "default": 2
+            }
+          }
+        },
+        "syncOptions": {
+          "type":"array",
+          "default": [
+            "ApplyOutOfSyncOnly=true",
+            "PruneLast=true",
+            "ServerSideApply=true",
+            "RespectIgnoreDifferences=true"
+          ],
+          "items": {
+            "type": "string"
           }
         }
       }

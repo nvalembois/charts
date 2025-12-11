@@ -1,17 +1,19 @@
 suite: test ArgoCD Project
 release:
-  name: test-release
-  namespace: test-namespace
+  name: release-name
+  namespace: release-namespace
 templates:
   - argocd-project.yaml
 tests:
   - it: should conform to default values
     asserts:
+      - hasDocuments:
+          count: 1
       - isKind:
           of: AppProject
       - equal:
           path: metadata.name
-          value: test-release
+          value: release-name
       - equal:
           path: metadata.namespace
           value: default
@@ -23,7 +25,7 @@ tests:
           count: 1
       - equal:
           path: spec.description
-          value: Projet 'test-release'
+          value: Projet 'release-name'
       - contains:
           path: spec.sourceRepos
           content: 'https://github.com/NValembois/**'
@@ -38,7 +40,7 @@ tests:
           content:
             server: 'https://kubernetes.default.svc'
             name: 'in-cluster'
-            namespace: test-release
+            namespace: release-name
       - lengthEqual:
           path: spec.destinations
           count: 1
@@ -250,7 +252,7 @@ tests:
           of: AppProject
       - equal:
           path: metadata.name
-          value: test-release
+          value: release-name
       - equal:
           path: metadata.namespace
           value: default
@@ -260,7 +262,7 @@ tests:
           count: 1
       - equal:
           path: spec.description
-          value: Projet 'test-release'
+          value: Projet 'release-name'
       - contains:
           path: spec.sourceRepos
           content: https://github.com/NValembois/**
@@ -269,7 +271,7 @@ tests:
           content: https://nvalembois.github.io/charts
       - contains:
           path: spec.sourceRepos
-          content: additionalSourceRepos-test-release
+          content: additionalSourceRepos-release-name
       - lengthEqual:
           path: spec.sourceRepos
           count: 3
@@ -278,31 +280,31 @@ tests:
           content:
             server: https://kubernetes.default.svc
             name: in-cluster
-            namespace: test-release
+            namespace: release-name
       - contains:
           path: spec.destinations
           content:
-            namespace: test-release
-            server: server-test-release
+            namespace: release-name
+            server: server-release-name
       - contains:
           path: spec.destinations
           content:
-            namespace: test-release
-            name: name-test-release
+            namespace: release-name
+            name: name-release-name
       - contains:
           path: spec.destinations
           content:
-            namespace: test-release
-            server: serverName-test-release
-            name: nameServer-test-release
+            namespace: release-name
+            server: serverName-release-name
+            name: nameServer-release-name
       - lengthEqual:
           path: spec.destinations
           count: 4
       - contains:
           path: spec.clusterResourceWhitelist
           content:
-            group: additionalClusterResourceWhitelist-group-test-release
-            kind: additionalClusterResourceWhitelist-kind-test-release
+            group: additionalClusterResourceWhitelist-group-release-name
+            kind: additionalClusterResourceWhitelist-kind-release-name
       - lengthEqual:
           path: spec.clusterResourceWhitelist
           count: 1
@@ -474,8 +476,8 @@ tests:
       - contains:
           path: spec.namespaceResourceWhitelist
           content:
-            group: additionalNamespaceResourceWhitelist-group-test-release
-            kind: additionalNamespaceResourceWhitelist-kind-test-release
+            group: additionalNamespaceResourceWhitelist-group-release-name
+            kind: additionalNamespaceResourceWhitelist-kind-release-name
       - lengthEqual:
           path: spec.namespaceResourceWhitelist
           count: 34
@@ -484,13 +486,13 @@ tests:
           value: false
       - contains:
           path: spec.roles
-          content: roles-test-release
+          content: roles-release-name
       - lengthEqual:
           path: spec.roles
           count: 1
       - contains:
           path: spec.syncWindows
-          content: syncWindows-test-release
+          content: syncWindows-release-name
       - lengthEqual:
           path: spec.syncWindows
           count: 1
@@ -499,7 +501,7 @@ tests:
           value: false
       - contains:
           path: spec.sourceNamespaces
-          content: sourceNamespaces-test-release
+          content: sourceNamespaces-release-name
       - lengthEqual:
           path: spec.sourceNamespaces
           count: 1
@@ -526,10 +528,10 @@ tests:
           of: AppProject
       - equal:
           path: metadata.name
-          value: test-release
+          value: release-name
       - equal:
           path: metadata.namespace
-          value: argocdNamespace-test-release
+          value: argocdNamespace-release-name
       - contains:
           path: metadata.finalizers
           content: resources-finalizer.argocd.argoproj.io
@@ -539,10 +541,10 @@ tests:
           count: 1
       - equal:
           path: spec.description
-          value: description-test-release
+          value: description-release-name
       - contains:
           path: spec.sourceRepos
-          content: sourceRepos-test-release
+          content: sourceRepos-release-name
           count: 1
       - lengthEqual:
           path: spec.sourceRepos
@@ -550,9 +552,9 @@ tests:
       - contains:
           path: spec.destinations
           content:
-            server: destinations-server-test-release
-            name: destinations-name-test-release
-            namespace: destinations-namespace-test-release
+            server: destinations-server-release-name
+            name: destinations-name-release-name
+            namespace: destinations-namespace-release-name
           count: 1
       - lengthEqual:
           path: spec.destinations
@@ -562,8 +564,8 @@ tests:
       - contains:
           path: spec.namespaceResourceWhitelist
           content:
-            group: namespaceResourceWhitelist-group-test-release
-            kind: namespaceResourceWhitelist-kind-test-release
+            group: namespaceResourceWhitelist-group-release-name
+            kind: namespaceResourceWhitelist-kind-release-name
           count: 1
       - lengthEqual:
           path: spec.namespaceResourceWhitelist

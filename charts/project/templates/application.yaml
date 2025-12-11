@@ -1,6 +1,7 @@
 {{- range .Values.dependencies -}}
-{{- if not (default false .disabled) -}}
-{{- $syncPolicy := mergeOverwrite (deepCopy $.Values.applicationDefaults.syncPolicy) (.syncPolicy | default dict) }}
+{{- $disabled := .disabled | default false -}}
+{{- if not $disabled -}}
+{{- $syncPolicy := deepCopy $.Values.applicationDefaults.syncPolicy | mergeOverwrite (.syncPolicy | default dict) }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -14,8 +15,8 @@ metadata:
 spec:
   destination:
     name: in-cluster
-    namespace: {{ $.Values.name | quote }}
-  project: {{ $.Values.name | quote }}
+    namespace: {{ include "name" $ | quote }}
+  project: {{ include "name" $ | quote }}
   sources:
     {{- if .name }}
     - repoURL: {{ $.Values.projectRepoURL }}
@@ -23,7 +24,7 @@ spec:
       ref: self
     {{- end }}
     {{- with .additionnalSources }}
-    {{- tpl (toYaml .) . | nindent 2 }}
+    {{- tpl (toYaml .) $ | nindent 2 }}
     {{- end }}
     - repoURL: {{ .repository | quote }}
       targetRevision: {{ .version | quote }}
@@ -34,11 +35,11 @@ spec:
       path: {{ tpl . $ | quote }}
       {{- end }}
       {{- with .helm }}
-      helm: {{ toYaml . | nindent 6 }}
+      helm: {{ tpl (toYaml .) $ | nindent 6 }}
       {{- end }}
   {{- with .ignoreDifferences }}
-  ignoreDifferences: {{ toYaml . | nindent 4 }}
+  ignoreDifferences: {{ tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
-  syncPolicy: {{ toYaml $syncPolicy | nindent 4 }}
+  syncPolicy: {{ tpl (toYaml $syncPolicy) $ | nindent 4 }}
 {{- end }}
 {{- end }}

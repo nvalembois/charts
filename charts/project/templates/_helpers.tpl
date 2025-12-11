@@ -3,19 +3,23 @@
 {{- end -}}
 
 {{- define "name" -}}
-{{- include "common.normalize-name" ( default .Release.Name .Values.name ) -}}
+{{- $name := $.Values.name | default $.Release.Name }}
+{{- include "common.normalize-name" $name -}}
 {{- end -}}
 
 {{- define "destination" -}}
-{{- if .params.namespace | default false }}
-namespace: {{ tpl (toYaml .params.namespace) $ | quote }}
-{{- else }}
+{{- $ := index . 0 }}
+{{- with index . 1 }}
+  {{- if .namespace | default false }}
+namespace: {{ tpl .namespace $ | quote }}
+  {{- else }}
 namespace: {{ include "name" $ | quote }}
-{{- end }}
-{{- with .params.server }}
-server: {{ tpl (toYaml .) $ | quote }}
-{{- end }}
-{{- with .params.name }}
-name: {{ tpl (toYaml .) $ | quote }}
+  {{- end }}
+  {{- with .server }}
+server: {{ tpl . $ | quote }}
+  {{- end }}
+  {{- with .name }}
+name: {{ tpl . $ | quote }}
+  {{- end }}
 {{- end }}
 {{- end -}}

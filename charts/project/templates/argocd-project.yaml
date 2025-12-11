@@ -12,10 +12,10 @@ spec:
   {{- end }}
   destinations:
   {{- range .Values.destinations }}
-  - {{ include "destination" (deepCopy $ | merge (dict "params" .)) | nindent 4 }}
+  - {{ include "destination" (list $ .) | nindent 4 }}
   {{- end }}
   {{- range .Values.additionnalDestinations }}
-  - {{ include "destination" (deepCopy $ | merge (dict "params" .)) | nindent 4 }}
+  - {{ include "destination" (list $ .) | nindent 4 }}
   {{- end }}
   {{- with (concat .Values.clusterResourceWhitelist .Values.additionalClusterResourceWhitelist) }}
   clusterResourceWhitelist: {{- tpl (toYaml .) $ | nindent 2 }}
