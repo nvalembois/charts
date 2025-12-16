@@ -32,21 +32,7 @@
         }
       }
     },
-    "k8s-store": {
-      "type": "object",
-      "properties": {
-        "create": {
-          "type": "boolean",
-          "description": "Specify whether to create the k8s-store SecretStore",
-          "default": true
-        }
-      },
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/nvalembois/charts/refs/tags/k8s-store-1.0.1/charts/k8s-store/values.schema.json"
-        }
-      ]
-    },
+    "k8s-store": {"$ref": "#/$defs/k8s-store"},
     "argocdNamespace": {
       "type": "string",
       "description": "The namespace where ArgoCD is installed",
@@ -111,7 +97,7 @@
       "type": "array",
       "description": "Additional namespace resources whitelisted for the project",
       "default": "[]",
-      "items": { "$ref": "#/$defs/resource"}
+      "items": {"$ref": "#/$defs/resource"}
     },
     "namespaceResourceWhitelist": {
       "type": "array",
@@ -338,6 +324,20 @@
           }
         }
       }
-    }
+    },
+    "k8s-store":{
+      "type": "object",
+      "namespace": {
+          "type": "string",
+          "description": "Objects namespace",
+          "default": "{{ .Release.Namespace }}"
+      },
+      "name": {
+          "type": "string",
+          "description": "Objects name",
+          "default": "{{ .Release.Name }}"
+      }
+    },
+    "additionalProperties": false
   }
 }

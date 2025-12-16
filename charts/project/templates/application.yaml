@@ -1,14 +1,15 @@
 {{- range .Values.dependencies -}}
 {{- $disabled := .disabled | default false -}}
 {{- if not $disabled -}}
-{{- $syncPolicy := deepCopy $.Values.applicationDefaults.syncPolicy | mergeOverwrite (.syncPolicy | default dict) }}
+{{- $syncPolicy := deepCopy $.Values.applicationDefaults.syncPolicy }}
+{{- $syncPolicy := .syncPolicy | default dict | mergeOverwrite $syncPolicy }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .alias | default .name | quote }}
-  namespace: '{{ .Values.argocdNamespace }}'
-  {{- if not (default false .addFinalizer) -}}
+  name: {{ tpl (.alias | default .name) $ | quote }}
+  namespace: {{ $.Values.argocdNamespace | quote }}
+  {{- if not (default false .addFinalizer) }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   {{- end }}
@@ -26,8 +27,8 @@ spec:
     {{- with .additionnalSources }}
     {{- tpl (toYaml .) $ | nindent 2 }}
     {{- end }}
-    - repoURL: {{ .repository | quote }}
-      targetRevision: {{ .version | quote }}
+    - repoURL: {{ tpl .repository $ | quote }}
+      targetRevision: {{ tpl .version $ | quote }}
       {{- with .name }}
       chart: {{ tpl . $ | quote }}
       {{- end }}
@@ -35,7 +36,7 @@ spec:
       path: {{ tpl . $ | quote }}
       {{- end }}
       {{- with .helm }}
-      helm: {{ tpl (toYaml .) $ | nindent 6 }}
+      helm: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
   {{- with .ignoreDifferences }}
   ignoreDifferences: {{ tpl (toYaml .) $ | nindent 4 }}

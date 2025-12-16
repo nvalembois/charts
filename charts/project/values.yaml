@@ -154,6 +154,18 @@ sourceNamespaces: []
 ## @section Applications
 ## @param dependencies [array] Array of project applications
 dependencies: []
+### minimal helm dependency with value file in project path
+# - name: chartName
+#   repository: chartRepository
+#   version: chartVersion
+#   helm:
+#     valueFiles:
+#       - '$self{{ .Values.projectRepoPath }}/helm-valueFiles'
+### minimal static dependency with files in project path
+# - alias: applicationName
+#   repository: '{{ .Values.projectRepoURL }}'
+#   version: repoBranchOrTag
+#   path: '{{ .Values.projectRepoPath }}/application'
 
 ## @section Applications Defaults
 applicationDefaults:
