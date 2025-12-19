@@ -49,11 +49,10 @@ jobs:
       timeout-minutes: 5
       with:
         fetch-depth: 1
-    # Installer Helm
-    - name: Install Helm
-      timeout-minutes: 5
-      run: |
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    # Installer Helm et exécuter le plan de test helm-unittest
+    - uses: d3adb5/helm-unittest-action@v2
+      with: # https://github.com/marketplace/actions/helm-unit-tests#options
+        charts: ${{ env.CHART_DIR }}/${{ env.chart }}
     # Valider le Chart (Lint)
     - name: Helm lint
       timeout-minutes: 5
