@@ -1,0 +1,584 @@
+suite: test ArgoCD Project
+release:
+  name: release-name
+  namespace: release-namespace
+templates:
+  - argocd-project.yaml
+tests:
+  - it: should conform to default values
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: AppProject
+      - equal:
+          path: metadata.name
+          value: release-name
+      - equal:
+          path: metadata.namespace
+          value: default
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+      - lengthEqual:
+          path: metadata.finalizers
+          count: 1
+      - equal:
+          path: spec.description
+          value: Projet 'release-name'
+      - contains:
+          path: spec.sourceRepos
+          content: 'https://github.com/NValembois/**'
+      - contains:
+          path: spec.sourceRepos
+          content: 'https://nvalembois.github.io/charts'
+      - lengthEqual:
+          path: spec.sourceRepos
+          count: 2
+      - contains:
+          path: spec.destinations
+          content:
+            server: 'https://kubernetes.default.svc'
+            name: 'in-cluster'
+            namespace: release-name
+      - lengthEqual:
+          path: spec.destinations
+          count: 1
+      - notExists:
+          path: clusterResourceWhitelist
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: ConfigMap
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: PersistentVolumeClaim
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: Pod
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: Secret
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: ServiceAccount
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: Service
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: DaemonSet
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: Deployment
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: ReplicaSet
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: StatefulSet
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: autoscaling
+            kind: HorizontalPodAutoscaler
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: batch
+            kind: CronJob
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: batch
+            kind: Job
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: networking.k8s.io
+            kind: Ingress
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: networking.k8s.io
+            kind: NetworkPolicy
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: bitnami.com
+            kind: SealedSecret
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: cert-manager.io
+            kind: CertificateRequest
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: cert-manager.io
+            kind: Certificate
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: cert-manager.io
+            kind: Issuer
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: job.min.io
+            kind: MinIOJob
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: metrics.k8s.io
+            kind: PodMetrics
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.coreos.com
+            kind: PodMonitor
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.coreos.com
+            kind: ServiceMonitor
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.coreos.com
+            kind: PrometheusRule
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.grafana.com
+            kind: MetricsInstance
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: policy
+            kind: PodDisruptionBudget
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: postgresql.cnpg.io
+            kind: Backup
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: postgresql.cnpg.io
+            kind: Cluster
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: postgresql.cnpg.io
+            kind: ScheduledBackup
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: rbac.authorization.k8s.io
+            kind: RoleBinding
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: rbac.authorization.k8s.io
+            kind: Role
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: s3.onyxia.sh
+            kind: Path
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: snapshot.storage.k8s.io
+            kind: VolumeSnapshot
+      - lengthEqual:
+          path: spec.namespaceResourceWhitelist
+          count: 33
+      - equal:
+          path: spec.orphanedResources.warn
+          value: false
+      - notExists:
+          path: spec.roles
+      - notExists:
+          path: spec.syncWindows
+      - equal:
+          path: spec.permitOnlyProjectScopedClusters
+          value: false
+      - notExists:
+          path: spec.sourceNamespaces
+  - it: should use additional values and templating
+    set:
+      additionalSourceRepos:
+        - additionalSourceRepos-{{ .Release.Name }}
+      additionnalDestinations:
+        - server: server-{{ .Release.Name }}
+        - name: name-{{ .Release.Name }}
+        - server: serverName-{{ .Release.Name }}
+          name: nameServer-{{ .Release.Name }}
+      additionalClusterResourceWhitelist:
+        - group: additionalClusterResourceWhitelist-group-{{ .Release.Name }}
+          kind: additionalClusterResourceWhitelist-kind-{{ .Release.Name }}
+      additionalNamespaceResourceWhitelist:
+        - group: additionalNamespaceResourceWhitelist-group-{{ .Release.Name }}
+          kind: additionalNamespaceResourceWhitelist-kind-{{ .Release.Name }}
+      roles:
+        - roles-{{ .Release.Name }}
+      syncWindows:
+        - syncWindows-{{ .Release.Name }}
+      sourceNamespaces:
+        - sourceNamespaces-{{ .Release.Name }}
+    asserts:
+      - isKind:
+          of: AppProject
+      - equal:
+          path: metadata.name
+          value: release-name
+      - equal:
+          path: metadata.namespace
+          value: default
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+          count: 1
+      - equal:
+          path: spec.description
+          value: Projet 'release-name'
+      - contains:
+          path: spec.sourceRepos
+          content: https://github.com/NValembois/**
+      - contains:
+          path: spec.sourceRepos
+          content: https://nvalembois.github.io/charts
+      - contains:
+          path: spec.sourceRepos
+          content: additionalSourceRepos-release-name
+      - lengthEqual:
+          path: spec.sourceRepos
+          count: 3
+      - contains:
+          path: spec.destinations
+          content:
+            server: https://kubernetes.default.svc
+            name: in-cluster
+            namespace: release-name
+      - contains:
+          path: spec.destinations
+          content:
+            namespace: release-name
+            server: server-release-name
+      - contains:
+          path: spec.destinations
+          content:
+            namespace: release-name
+            name: name-release-name
+      - contains:
+          path: spec.destinations
+          content:
+            namespace: release-name
+            server: serverName-release-name
+            name: nameServer-release-name
+      - lengthEqual:
+          path: spec.destinations
+          count: 4
+      - contains:
+          path: spec.clusterResourceWhitelist
+          content:
+            group: additionalClusterResourceWhitelist-group-release-name
+            kind: additionalClusterResourceWhitelist-kind-release-name
+      - lengthEqual:
+          path: spec.clusterResourceWhitelist
+          count: 1
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: ConfigMap
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: PersistentVolumeClaim
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: Pod
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: Secret
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: ServiceAccount
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: ''
+            kind: Service
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: DaemonSet
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: Deployment
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: ReplicaSet
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: apps
+            kind: StatefulSet
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: autoscaling
+            kind: HorizontalPodAutoscaler
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: batch
+            kind: CronJob
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: batch
+            kind: Job
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: networking.k8s.io
+            kind: Ingress
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: networking.k8s.io
+            kind: NetworkPolicy
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: bitnami.com
+            kind: SealedSecret
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: cert-manager.io
+            kind: CertificateRequest
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: cert-manager.io
+            kind: Certificate
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: cert-manager.io
+            kind: Issuer
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: job.min.io
+            kind: MinIOJob
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: metrics.k8s.io
+            kind: PodMetrics
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.coreos.com
+            kind: PodMonitor
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.coreos.com
+            kind: ServiceMonitor
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.coreos.com
+            kind: PrometheusRule
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: monitoring.grafana.com
+            kind: MetricsInstance
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: policy
+            kind: PodDisruptionBudget
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: postgresql.cnpg.io
+            kind: Backup
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: postgresql.cnpg.io
+            kind: Cluster
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: postgresql.cnpg.io
+            kind: ScheduledBackup
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: rbac.authorization.k8s.io
+            kind: RoleBinding
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: rbac.authorization.k8s.io
+            kind: Role
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: s3.onyxia.sh
+            kind: Path
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: snapshot.storage.k8s.io
+            kind: VolumeSnapshot
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: additionalNamespaceResourceWhitelist-group-release-name
+            kind: additionalNamespaceResourceWhitelist-kind-release-name
+      - lengthEqual:
+          path: spec.namespaceResourceWhitelist
+          count: 34
+      - equal:
+          path: spec.orphanedResources.warn
+          value: false
+      - contains:
+          path: spec.roles
+          content: roles-release-name
+      - lengthEqual:
+          path: spec.roles
+          count: 1
+      - contains:
+          path: spec.syncWindows
+          content: syncWindows-release-name
+      - lengthEqual:
+          path: spec.syncWindows
+          count: 1
+      - equal:
+          path: spec.permitOnlyProjectScopedClusters
+          value: false
+      - contains:
+          path: spec.sourceNamespaces
+          content: sourceNamespaces-release-name
+      - lengthEqual:
+          path: spec.sourceNamespaces
+          count: 1
+  - it: should conform to overrides and templating
+    set:
+      argocdNamespace: argocdNamespace-{{ .Release.Name }}
+      projectRepoURL: projectRepoURL-{{ .Release.Name }}
+      projectRepoPath: projectRepoPath-{{ .Release.Name }}
+      description: description-{{ .Release.Name }}
+      sourceRepos:
+        - sourceRepos-{{ .Release.Name }}
+      destinations:
+        - server: destinations-server-{{ .Release.Name }}
+          name: destinations-name-{{ .Release.Name }}
+          namespace: destinations-namespace-{{ .Release.Name }}
+      namespaceResourceWhitelist:
+        - group: namespaceResourceWhitelist-group-{{ .Release.Name }}
+          kind: namespaceResourceWhitelist-kind-{{ .Release.Name }}
+      orphanedResources:
+        warn: true
+      permitOnlyProjectScopedClusters: true
+    asserts:
+      - isKind:
+          of: AppProject
+      - equal:
+          path: metadata.name
+          value: release-name
+      - equal:
+          path: metadata.namespace
+          value: argocdNamespace-release-name
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+          count: 1
+      - lengthEqual:
+          path: metadata.finalizers
+          count: 1
+      - equal:
+          path: spec.description
+          value: description-release-name
+      - contains:
+          path: spec.sourceRepos
+          content: sourceRepos-release-name
+          count: 1
+      - lengthEqual:
+          path: spec.sourceRepos
+          count: 1
+      - contains:
+          path: spec.destinations
+          content:
+            server: destinations-server-release-name
+            name: destinations-name-release-name
+            namespace: destinations-namespace-release-name
+          count: 1
+      - lengthEqual:
+          path: spec.destinations
+          count: 1
+      - notExists:
+          path: clusterResourceWhitelist
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: namespaceResourceWhitelist-group-release-name
+            kind: namespaceResourceWhitelist-kind-release-name
+          count: 1
+      - lengthEqual:
+          path: spec.namespaceResourceWhitelist
+          count: 1
+      - equal:
+          path: spec.orphanedResources.warn
+          value: true
+      - notExists:
+          path: spec.roles
+      - notExists:
+          path: spec.syncWindows
+      - equal:
+          path: spec.permitOnlyProjectScopedClusters
+          value: true
+      - notExists:
+          path: spec.sourceNamespaces

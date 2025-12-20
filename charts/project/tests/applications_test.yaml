@@ -1,0 +1,225 @@
+suite: test ArgoCD Applications
+release:
+  name: test-release
+  namespace: test-namespace
+templates:
+  - application.yaml
+tests:
+  - it: should conform to default values
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should conform to 1 helm source and templating
+    set:
+      argocdNamespace: argocdNamespace
+      projectRepoURL: projectRepoURL
+      projectRepoPath: /projectRepoPath
+      dependencies:
+        - name: test-application
+          repository: repository
+          version: version
+          helm:
+            releaseName: helm-releaseName
+            valueFiles:
+              - '$self{{ .Values.projectRepoPath }}/helm-valueFiles'
+          ignoreDifferences:
+            - group: group
+              kind: kind
+              jqPathExpressions:
+                - jqPathExpressions
+          syncPolicy:
+            automated:
+              selfHeal: false
+              prune: false
+            retry:
+              backoff:
+                duration: duration
+                factor: 1
+                maxDuration: maxDuration
+                limit: 1
+              syncOptions:
+                - syncOptions1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Application
+      - equal:
+          path: metadata.namespace
+          value: argocdNamespace
+      - equal:
+          path: metadata.name
+          value: test-application
+      - lengthEqual:
+          path: metadata.finalizers
+          count: 1
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+          count: 1
+      - equal:
+          path: spec.destination.name
+          value: in-cluster
+      - equal:
+          path: spec.destination.namespace
+          value: test-release
+      - equal:
+          path: spec.project
+          value: test-release
+      - lengthEqual:
+          path: spec.sources
+          count: 2
+      - contains:
+          path: spec.sources
+          count: 1
+          content:
+            repoURL: projectRepoURL
+            targetRevision: HEAD
+            ref: self            
+      - contains:
+          path: spec.sources
+          count: 1
+          content:
+            repoURL: repository
+            targetRevision: version
+            chart: test-application
+            helm:
+              releaseName: helm-releaseName
+              valueFiles:
+                - $self/projectRepoPath/helm-valueFiles
+      - lengthEqual:
+          path: spec.ignoreDifferences
+          count: 1
+      - contains:
+          path: spec.ignoreDifferences
+          count: 1
+          content:
+            group: group
+            kind: kind
+            jqPathExpressions:
+              - jqPathExpressions
+      - equal:
+          path: spec.syncPolicy.automated.selfHeal
+          value: false
+      - equal:
+          path: spec.syncPolicy.automated.prune
+          value: false
+      - equal:
+          path: spec.syncPolicy.retry.backoff.duration
+          value: duration
+      - equal:
+          path: spec.syncPolicy.retry.backoff.factor
+          value: 1
+      - equal:
+          path: spec.syncPolicy.retry.backoff.maxDuration
+          value: maxDuration
+      - equal:
+          path: spec.syncPolicy.retry.backoff.limit
+          value: 1
+      - lengthEqual:
+          path: spec.syncPolicy.retry.syncOptions
+          count: 1
+      - contains:
+          path: spec.syncPolicy.retry.syncOptions
+          count: 1
+          content: syncOptions1
+  - it: should conform to 1 static and templating
+    set:
+      argocdNamespace: argocdNamespace
+      projectRepoURL: projectRepoURL
+      projectRepoPath: /projectRepoPath
+      dependencies:
+        - alias: 'alias-{{ .Release.Name }}'
+          repository: '{{ .Values.projectRepoURL }}'
+          version: version-{{ .Release.Name }}
+          path: '{{ .Values.projectRepoPath }}'
+          ignoreDifferences:
+            - group: group
+              kind: kind
+              jqPathExpressions:
+                - jqPathExpressions
+          syncPolicy:
+            automated:
+              selfHeal: false
+              prune: false
+            retry:
+              backoff:
+                duration: duration
+                factor: 1
+                maxDuration: maxDuration
+                limit: 1
+              syncOptions:
+                - syncOptions1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Application
+      - equal:
+          path: metadata.namespace
+          value: argocdNamespace
+      - equal:
+          path: metadata.name
+          value: alias-test-release
+      - lengthEqual:
+          path: metadata.finalizers
+          count: 1
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+          count: 1
+      - equal:
+          path: spec.destination.name
+          value: in-cluster
+      - equal:
+          path: spec.destination.namespace
+          value: test-release
+      - equal:
+          path: spec.project
+          value: test-release
+      - lengthEqual:
+          path: spec.sources
+          count: 1
+      - contains:
+          path: spec.sources
+          count: 1
+          content:
+            repoURL: projectRepoURL
+            targetRevision: version-test-release
+            path: /projectRepoPath
+      - lengthEqual:
+          path: spec.ignoreDifferences
+          count: 1
+      - contains:
+          path: spec.ignoreDifferences
+          count: 1
+          content:
+            group: group
+            kind: kind
+            jqPathExpressions:
+              - jqPathExpressions
+      - equal:
+          path: spec.syncPolicy.automated.selfHeal
+          value: false
+      - equal:
+          path: spec.syncPolicy.automated.prune
+          value: false
+      - equal:
+          path: spec.syncPolicy.retry.backoff.duration
+          value: duration
+      - equal:
+          path: spec.syncPolicy.retry.backoff.factor
+          value: 1
+      - equal:
+          path: spec.syncPolicy.retry.backoff.maxDuration
+          value: maxDuration
+      - equal:
+          path: spec.syncPolicy.retry.backoff.limit
+          value: 1
+      - lengthEqual:
+          path: spec.syncPolicy.retry.syncOptions
+          count: 1
+      - contains:
+          path: spec.syncPolicy.retry.syncOptions
+          count: 1
+          content: syncOptions1

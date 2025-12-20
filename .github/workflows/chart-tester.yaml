@@ -8,7 +8,6 @@ on:
     paths:
     - 'charts/**'  # Déclencher uniquement si un chart est modifié
 
-      
 jobs:
   changed-charts:
     name: Get changed charts
@@ -49,11 +48,10 @@ jobs:
       timeout-minutes: 5
       with:
         fetch-depth: 1
-    # Installer Helm
-    - name: Install Helm
-      timeout-minutes: 5
-      run: |
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    # Installer Helm et exécuter le plan de test helm-unittest
+    - uses: d3adb5/helm-unittest-action@v2
+      with: # https://github.com/marketplace/actions/helm-unit-tests#options
+        charts: ${{ env.CHART_DIR }}/${{ env.chart }}
     # Valider le Chart (Lint)
     - name: Helm lint
       timeout-minutes: 5
@@ -72,13 +70,13 @@ jobs:
       run: |
         echo "Processing $chart"
         if [[ -f ci/dependencies.txt ]]; then
-          for url in $(cat ci/dependencies.txt); do
-            echo " apply $url"
-            kubectl apply --server-side -f "$url"
+          for dependency in $(cat ci/dependencies.txt); do
+            echo " apply ${dependency}"
+            kubectl apply --server-side -f "${dependency}"
             echo " wait for deployment is ready"
             # delete all succeeded pods (jobs)
             kubectl delete pod -A --field-selector=status.phase==Succeeded
-            # wait all pods are iun ready state
+            # wait all pods are in ready state
             kubectl wait   pod -A --for=condition=Ready --all --timeout=120s
           done
         fi

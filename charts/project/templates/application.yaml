@@ -1,42 +1,46 @@
 {{- range .Values.dependencies -}}
-{{- if not (default false .disabled) -}}
-{{- $syncPolicy := mergeOverwrite (deepCopy $.Values.applicationDefaults.syncPolicy) (.syncPolicy | default dict) }}
+{{- $disabled := .disabled | default false -}}
+{{- if not $disabled -}}
+{{- $syncPolicy := deepCopy $.Values.applicationDefaults.syncPolicy }}
+{{- $syncPolicy := .syncPolicy | default dict | mergeOverwrite $syncPolicy }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .alias | default .name | quote }}
-  namespace: kube-argo-cd
+  name: {{ tpl (.alias | default .name) $ | quote }}
+  namespace: {{ $.Values.argocdNamespace | quote }}
+  {{- if not (default false .addFinalizer) }}
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
+  {{- end }}
 spec:
   destination:
     name: in-cluster
-    namespace: {{ $.Values.name | quote }}
-  project: {{ $.Values.name | quote }}
+    namespace: {{ include "name" $ | quote }}
+  project: {{ include "name" $ | quote }}
   sources:
-  {{- if .name }}
-  - repoURL: https://github.com/NValembois/argo-main.git
-    targetRevision: HEAD
-    ref: self
-  {{- end }}
-  {{- with .additionnalSources }}
-  {{- toYaml .  | nindent 2 }}
-  {{- end }}
-  - repoURL: {{ .repository | quote }}
-    targetRevision: {{ .version | quote }}
-    {{- with .name }}
-    chart: {{ quote . }}
+    {{- if .name }}
+    - repoURL: {{ $.Values.projectRepoURL }}
+      targetRevision: HEAD
+      ref: self
     {{- end }}
-    {{- with .path }}
-    path: {{ quote . }}
+    {{- with .additionnalSources }}
+    {{- tpl (toYaml .) $ | nindent 2 }}
     {{- end }}
-    {{- with .helm }}
-    helm: {{ toYaml . | nindent 6 }}
-    {{- end }}
+    - repoURL: {{ tpl .repository $ | quote }}
+      targetRevision: {{ tpl .version $ | quote }}
+      {{- with .name }}
+      chart: {{ tpl . $ | quote }}
+      {{- end }}
+      {{- with .path }}
+      path: {{ tpl . $ | quote }}
+      {{- end }}
+      {{- with .helm }}
+      helm: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
   {{- with .ignoreDifferences }}
-  ignoreDifferences: {{ toYaml . | nindent 4 }}
+  ignoreDifferences: {{ tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
-  syncPolicy: {{ toYaml $syncPolicy | nindent 4 }}
+  syncPolicy: {{ tpl (toYaml $syncPolicy) $ | nindent 4 }}
 {{- end }}
 {{- end }}

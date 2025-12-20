@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.8] - 2025-12-18
+
+### Added
+
+- templating for application parameters
+- parameter for application finalizer switch
+- parameter for application projectRepoURL and projectRepoPath
+- create function to factorize project destination rendering
+- schema improvements
+- chart unit tests
+
+### Fixed
+
+- application destination namespace could be wrong
+
 ## [1.0.7] - 2025-07-25
 
 ### Fixed
