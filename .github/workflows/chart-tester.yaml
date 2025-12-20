@@ -62,7 +62,7 @@ jobs:
     # Tester l'installation en utilisant Kind (Kubernetes in Docker)
     - name: Set up KinD cluster
       timeout-minutes: 10
-      uses: helm/kind-action@v1.12.0
+      uses: helm/kind-action@v1.13.0
     # Installer le Chart
     - name: Install Chart on KinD
       timeout-minutes: 10
