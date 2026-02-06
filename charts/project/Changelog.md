@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.9] - 2026-02-06
+
+### Added
+
+- GatewayAPI ressources to resourceWhiteList
+
 ## [1.0.8] - 2025-12-18
 
 ### Added
