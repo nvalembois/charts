@@ -211,9 +211,24 @@ tests:
           content:
             group: snapshot.storage.k8s.io
             kind: VolumeSnapshot
-      - lengthEqual:
+       - contains:
           path: spec.namespaceResourceWhitelist
-          count: 33
+          content:
+            group: gateway.networking.k8s.io
+            kind: Gateway
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: gateway.networking.k8s.io
+            kind: HTTPRoute
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: gateway.networking.k8s.io
+            kind: GRPCRoute
+     - lengthEqual:
+          path: spec.namespaceResourceWhitelist
+          count: 36
       - equal:
           path: spec.orphanedResources.warn
           value: false
