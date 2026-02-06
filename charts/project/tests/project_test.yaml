@@ -211,7 +211,7 @@ tests:
           content:
             group: snapshot.storage.k8s.io
             kind: VolumeSnapshot
-       - contains:
+      - contains:
           path: spec.namespaceResourceWhitelist
           content:
             group: gateway.networking.k8s.io
@@ -226,7 +226,7 @@ tests:
           content:
             group: gateway.networking.k8s.io
             kind: GRPCRoute
-     - lengthEqual:
+      - lengthEqual:
           path: spec.namespaceResourceWhitelist
           count: 36
       - equal:
@@ -246,10 +246,18 @@ tests:
       additionalSourceRepos:
         - additionalSourceRepos-{{ .Release.Name }}
       additionnalDestinations:
-        - server: server-{{ .Release.Name }}
         - name: name-{{ .Release.Name }}
-        - server: serverName-{{ .Release.Name }}
-          name: nameServer-{{ .Release.Name }}
+        - namespace: namespace-{{ .Release.Name }}
+        - server: server-{{ .Release.Name }}
+        - name: nameServer-{{ .Release.Name }}
+          server: serverName-{{ .Release.Name }}
+        - namespace: namespaceServer-{{ .Release.Name }}
+          server: serverNamespace-{{ .Release.Name }}
+        - name: nameNamespace-{{ .Release.Name }}
+          namespace: namespaceName-{{ .Release.Name }}
+        - name: nameServerNamespace-{{ .Release.Name }}
+          namespace: namespaceServerName-{{ .Release.Name }}
+          server: serverNameNamespace-{{ .Release.Name }}
       additionalClusterResourceWhitelist:
         - group: additionalClusterResourceWhitelist-group-{{ .Release.Name }}
           kind: additionalClusterResourceWhitelist-kind-{{ .Release.Name }}
@@ -290,31 +298,53 @@ tests:
       - lengthEqual:
           path: spec.sourceRepos
           count: 3
-      - contains:
+      - contains: # destinations
           path: spec.destinations
           content:
-            server: https://kubernetes.default.svc
             name: in-cluster
             namespace: release-name
-      - contains:
+            server: https://kubernetes.default.svc
+      - contains: # additionnalDestinations: server
           path: spec.destinations
           content:
             namespace: release-name
             server: server-release-name
-      - contains:
+      - contains: # additionnalDestinations: name
           path: spec.destinations
           content:
             namespace: release-name
             name: name-release-name
-      - contains:
+      - contains: # additionnalDestinations: namespace
+          path: spec.destinations
+          content:
+            name: in-cluster
+            namespace: namespace-release-name
+            server: https://kubernetes.default.svc
+      - contains: # additionnalDestinations: server
           path: spec.destinations
           content:
             namespace: release-name
             server: serverName-release-name
             name: nameServer-release-name
+      - contains: # additionnalDestinations: name,server
+          path: spec.destinations
+          content:
+            name: nameServer-release-name
+            server: serverName-release-name
+      - contains: # additionnalDestinations: name,namespace
+          path: spec.destinations
+          content:
+            name: nameNamespace-release-name
+            namespace: namespaceName-release-name
+      - contains: # additionnalDestinations: name,namespace,server
+          path: spec.destinations
+          content:
+            name: nameServerNamespace-release-name
+            namespace: namespaceServerName-release-name
+            server: serverNameNamespace-release-name
       - lengthEqual:
           path: spec.destinations
-          count: 4
+          count: 8
       - contains:
           path: spec.clusterResourceWhitelist
           content:
