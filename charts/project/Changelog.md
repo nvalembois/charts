@@ -5,7 +5,7 @@
 ### Added
 
 - GatewayAPI ressources to resourceWhiteList
-- Set local cluster name and destination for additionnalDestination with namespace
+- Allow destination with namespace only targetting local cluster
 
 ## [1.0.8] - 2025-12-18
 
