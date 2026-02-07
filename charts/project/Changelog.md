@@ -5,7 +5,10 @@
 ### Added
 
 - GatewayAPI ressources to resourceWhiteList
-- Allow destination with namespace only targetting local cluster
+
+### Fixed
+
+- Destination without namespace now targets any namespace insteed of current namespace
 
 ## [1.0.8] - 2025-12-18
 

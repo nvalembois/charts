@@ -10,14 +10,8 @@
 {{- define "destination" -}}
 {{- $ := index . 0 -}}
 {{- with index . 1 -}}
-  {{- if .namespace | default false }}
-namespace: {{ tpl .namespace $ | quote }}
-  {{- else }}
-namespace: {{ include "name" $ | quote }}
-  {{- if and (not .server) (not .name) }}
-name: in-cluster
-server: https://kubernetes.default.svc
-  {{- end -}}
+  {{- with .namespace }}
+namespace: {{ tpl . $ | quote }}
   {{- end -}}
   {{- with .server }}
 server: {{ tpl . $ | quote }}

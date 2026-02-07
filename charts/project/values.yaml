@@ -53,6 +53,7 @@ additionnalDestinations: []
 destinations:
   - server: 'https://kubernetes.default.svc'
     name: 'in-cluster'
+    namespace: '{{ .Release.Name }}'
 
 ## Cluster resource whitelist
 ## @param additionalClusterResourceWhitelist Additional cluster resources allowed for the project

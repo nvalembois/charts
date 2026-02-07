@@ -301,25 +301,16 @@ tests:
       - contains: # additionnalDestinations: server
           path: spec.destinations
           content:
-            namespace: release-name
             server: server-release-name
       - contains: # additionnalDestinations: name
           path: spec.destinations
           content:
-            namespace: release-name
             name: name-release-name
-      - contains: # additionnalDestinations: namespace
+      - contains: # additionnalDestinations: server,namespace
           path: spec.destinations
           content:
-            name: in-cluster
-            namespace: namespace-release-name
-            server: https://kubernetes.default.svc
-      - contains: # additionnalDestinations: server
-          path: spec.destinations
-          content:
-            namespace: release-name
-            server: serverName-release-name
-            name: nameServer-release-name
+            namespace: namespaceServer-release-name
+            server: serverNamespace-release-name
       - contains: # additionnalDestinations: name,server
           path: spec.destinations
           content:
