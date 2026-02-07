@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2026-02-07
+
+### Fixed
+
+- Default destination did not target correct namespace
+
 ## [1.0.9] - 2026-02-06
 
 ### Added
