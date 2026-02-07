@@ -2,6 +2,11 @@
   "title": "Chart Values",
   "type": "object",
   "properties": {
+    "name": {
+      "type":"string",
+      "description": "project name",
+      "default": "{{.Release.Name}}"
+    },
     "namespace": {
       "type": "object",
       "properties": {
@@ -215,6 +220,7 @@
       }
     }
   },
+  "additionalProperties": false,
   "$defs": {
     "destination": {
       "type": "object",

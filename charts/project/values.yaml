@@ -1,4 +1,9 @@
 # https://www.npmjs.com/package/@bitnami/readme-generator-for-helm
+
+## Project configuration
+## @param name Project name defaults to "{{.Release.Name}}"
+# name: "project"
+
 ## Namespace configuration
 ## @section Namespace
 ## @param namespace.create Specify whether to create the namespace
