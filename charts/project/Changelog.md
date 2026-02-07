@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1] - 2026-02-07
+
+### Added
+
+- Schema allow version, apiVersion and appVersion
+
 ## [1.1.0] - 2026-02-07
 
 ### Fixed

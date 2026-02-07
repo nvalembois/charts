@@ -7,6 +7,18 @@
       "description": "project name",
       "default": "{{.Release.Name}}"
     },
+    "version": {
+      "type":"string",
+      "description": "project version, not used"
+    },
+    "apiVersion": {
+      "type":"string",
+      "description": "project apiVersion, not used"
+    },
+    "appVersion": {
+      "type":"string",
+      "description": "project appVersion, not used"
+    },
     "namespace": {
       "type": "object",
       "properties": {
