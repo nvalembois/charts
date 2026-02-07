@@ -196,6 +196,21 @@ entries:
   project:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-02-07T09:06:33.650326461Z"
+    dependencies:
+    - condition: k8s-store.create
+      name: k8s-store
+      repository: https://nvalembois.github.io/charts
+      version: 1.0.4
+    description: project Helm Chart that deploys a pg-cluster
+    digest: 347bead644d297f0820e66ea1cd1115606ca34daac1dc7c204e17da31adf9c46
+    name: project
+    type: application
+    urls:
+    - project-1.0.9.tgz
+    version: 1.0.9
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-12-20T09:09:59.033808293Z"
     dependencies:
     - condition: k8s-store.create
@@ -347,4 +362,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2025-12-20T09:09:59.033860031Z"
+generated: "2026-02-07T09:06:33.65038775Z"
