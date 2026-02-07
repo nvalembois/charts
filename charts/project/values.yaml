@@ -1,4 +1,9 @@
 # https://www.npmjs.com/package/@bitnami/readme-generator-for-helm
+
+## Project configuration
+## @param name Project name defaults to "{{.Release.Name}}"
+# name: "project"
+
 ## Namespace configuration
 ## @section Namespace
 ## @param namespace.create Specify whether to create the namespace
@@ -53,7 +58,7 @@ additionnalDestinations: []
 destinations:
   - server: 'https://kubernetes.default.svc'
     name: 'in-cluster'
-    namespace: '{{ .Release.Name }}'
+    namespace: '{{ include "name" . }}'
 
 ## Cluster resource whitelist
 ## @param additionalClusterResourceWhitelist Additional cluster resources allowed for the project
