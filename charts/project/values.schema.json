@@ -237,8 +237,9 @@
       },
       "additionalProperties": false,
       "anyOf": [
-        { "required": [ "server" ] },
-        { "required": [ "name" ] }
+        { "required": [ "name" ] },
+        { "required": [ "namespace" ] },
+        { "required": [ "server" ] }
       ]
     },
     "resource": {

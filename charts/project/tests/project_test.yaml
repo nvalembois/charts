@@ -211,7 +211,7 @@ tests:
           content:
             group: snapshot.storage.k8s.io
             kind: VolumeSnapshot
-       - contains:
+      - contains:
           path: spec.namespaceResourceWhitelist
           content:
             group: gateway.networking.k8s.io
@@ -226,7 +226,7 @@ tests:
           content:
             group: gateway.networking.k8s.io
             kind: GRPCRoute
-     - lengthEqual:
+      - lengthEqual: # 36 resources
           path: spec.namespaceResourceWhitelist
           count: 36
       - equal:
@@ -241,18 +241,32 @@ tests:
           value: false
       - notExists:
           path: spec.sourceNamespaces
-  - it: should use additional values and templating
+  - it: should conform to default overrides and to additional values with templating
     set:
+      sourceRepos: []
       additionalSourceRepos:
         - additionalSourceRepos-{{ .Release.Name }}
+      destinations: []
       additionnalDestinations:
-        - server: server-{{ .Release.Name }}
         - name: name-{{ .Release.Name }}
-        - server: serverName-{{ .Release.Name }}
-          name: nameServer-{{ .Release.Name }}
+        - namespace: namespace-{{ .Release.Name }}
+        - server: server-{{ .Release.Name }}
+        - name: nameServer-{{ .Release.Name }}
+          server: serverName-{{ .Release.Name }}
+        - namespace: namespaceServer-{{ .Release.Name }}
+          server: serverNamespace-{{ .Release.Name }}
+        - name: nameNamespace-{{ .Release.Name }}
+          namespace: namespaceName-{{ .Release.Name }}
+        - name: nameServerNamespace-{{ .Release.Name }}
+          namespace: namespaceServerName-{{ .Release.Name }}
+          server: serverNameNamespace-{{ .Release.Name }}
+      clusterResourceWhitelist:
+        - group: clusterResourceWhitelist-group-{{ .Release.Name }}
+          kind: clusterResourceWhitelist-kind-{{ .Release.Name }}
       additionalClusterResourceWhitelist:
         - group: additionalClusterResourceWhitelist-group-{{ .Release.Name }}
           kind: additionalClusterResourceWhitelist-kind-{{ .Release.Name }}
+      namespaceResourceWhitelist: []
       additionalNamespaceResourceWhitelist:
         - group: additionalNamespaceResourceWhitelist-group-{{ .Release.Name }}
           kind: additionalNamespaceResourceWhitelist-kind-{{ .Release.Name }}
@@ -280,41 +294,47 @@ tests:
           value: Projet 'release-name'
       - contains:
           path: spec.sourceRepos
-          content: https://github.com/NValembois/**
-      - contains:
-          path: spec.sourceRepos
-          content: https://nvalembois.github.io/charts
-      - contains:
-          path: spec.sourceRepos
           content: additionalSourceRepos-release-name
       - lengthEqual:
           path: spec.sourceRepos
-          count: 3
-      - contains:
+          count: 1
+      - contains: # additionnalDestinations: server
           path: spec.destinations
           content:
-            server: https://kubernetes.default.svc
-            name: in-cluster
-            namespace: release-name
-      - contains:
-          path: spec.destinations
-          content:
-            namespace: release-name
             server: server-release-name
-      - contains:
+      - contains: # additionnalDestinations: name
           path: spec.destinations
           content:
-            namespace: release-name
             name: name-release-name
-      - contains:
+      - contains: # additionnalDestinations: server,namespace
           path: spec.destinations
           content:
-            namespace: release-name
-            server: serverName-release-name
+            namespace: namespaceServer-release-name
+            server: serverNamespace-release-name
+      - contains: # additionnalDestinations: name,server
+          path: spec.destinations
+          content:
             name: nameServer-release-name
+            server: serverName-release-name
+      - contains: # additionnalDestinations: name,namespace
+          path: spec.destinations
+          content:
+            name: nameNamespace-release-name
+            namespace: namespaceName-release-name
+      - contains: # additionnalDestinations: name,namespace,server
+          path: spec.destinations
+          content:
+            name: nameServerNamespace-release-name
+            namespace: namespaceServerName-release-name
+            server: serverNameNamespace-release-name
       - lengthEqual:
           path: spec.destinations
-          count: 4
+          count: 7
+      - contains:
+          path: spec.clusterResourceWhitelist
+          content:
+            group: clusterResourceWhitelist-group-release-name
+            kind: clusterResourceWhitelist-kind-release-name
       - contains:
           path: spec.clusterResourceWhitelist
           content:
@@ -322,172 +342,7 @@ tests:
             kind: additionalClusterResourceWhitelist-kind-release-name
       - lengthEqual:
           path: spec.clusterResourceWhitelist
-          count: 1
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: ''
-            kind: ConfigMap
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: ''
-            kind: PersistentVolumeClaim
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: ''
-            kind: Pod
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: ''
-            kind: Secret
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: ''
-            kind: ServiceAccount
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: ''
-            kind: Service
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: apps
-            kind: DaemonSet
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: apps
-            kind: Deployment
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: apps
-            kind: ReplicaSet
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: apps
-            kind: StatefulSet
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: autoscaling
-            kind: HorizontalPodAutoscaler
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: batch
-            kind: CronJob
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: batch
-            kind: Job
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: networking.k8s.io
-            kind: Ingress
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: networking.k8s.io
-            kind: NetworkPolicy
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: bitnami.com
-            kind: SealedSecret
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: cert-manager.io
-            kind: CertificateRequest
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: cert-manager.io
-            kind: Certificate
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: cert-manager.io
-            kind: Issuer
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: job.min.io
-            kind: MinIOJob
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: metrics.k8s.io
-            kind: PodMetrics
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: monitoring.coreos.com
-            kind: PodMonitor
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: monitoring.coreos.com
-            kind: ServiceMonitor
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: monitoring.coreos.com
-            kind: PrometheusRule
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: monitoring.grafana.com
-            kind: MetricsInstance
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: policy
-            kind: PodDisruptionBudget
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: postgresql.cnpg.io
-            kind: Backup
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: postgresql.cnpg.io
-            kind: Cluster
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: postgresql.cnpg.io
-            kind: ScheduledBackup
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: rbac.authorization.k8s.io
-            kind: RoleBinding
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: rbac.authorization.k8s.io
-            kind: Role
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: s3.onyxia.sh
-            kind: Path
-      - contains:
-          path: spec.namespaceResourceWhitelist
-          content:
-            group: snapshot.storage.k8s.io
-            kind: VolumeSnapshot
+          count: 2
       - contains:
           path: spec.namespaceResourceWhitelist
           content:
@@ -495,7 +350,7 @@ tests:
             kind: additionalNamespaceResourceWhitelist-kind-release-name
       - lengthEqual:
           path: spec.namespaceResourceWhitelist
-          count: 34
+          count: 1
       - equal:
           path: spec.orphanedResources.warn
           value: false

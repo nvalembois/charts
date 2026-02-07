@@ -53,6 +53,7 @@ additionnalDestinations: []
 destinations:
   - server: 'https://kubernetes.default.svc'
     name: 'in-cluster'
+    namespace: '{{ .Release.Name }}'
 
 ## Cluster resource whitelist
 ## @param additionalClusterResourceWhitelist Additional cluster resources allowed for the project
@@ -131,7 +132,13 @@ namespaceResourceWhitelist:
     kind: Path
   - group: snapshot.storage.k8s.io
     kind: VolumeSnapshot
-
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+  - group: gateway.networking.k8s.io
+    kind: GRPCRoute
+    
 ## Orphaned resources
 ## @param orphanedResources.warn Whether to warn about orphaned resources
 orphanedResources:

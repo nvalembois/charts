@@ -8,18 +8,16 @@
 {{- end -}}
 
 {{- define "destination" -}}
-{{- $ := index . 0 }}
-{{- with index . 1 }}
-  {{- if .namespace | default false }}
-namespace: {{ tpl .namespace $ | quote }}
-  {{- else }}
-namespace: {{ include "name" $ | quote }}
-  {{- end }}
+{{- $ := index . 0 -}}
+{{- with index . 1 -}}
+  {{- with .namespace }}
+namespace: {{ tpl . $ | quote }}
+  {{- end -}}
   {{- with .server }}
 server: {{ tpl . $ | quote }}
-  {{- end }}
+  {{- end -}}
   {{- with .name }}
 name: {{ tpl . $ | quote }}
-  {{- end }}
-{{- end }}
+  {{- end -}}
+{{- end -}}
 {{- end -}}
