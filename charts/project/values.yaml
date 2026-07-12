@@ -143,6 +143,8 @@ namespaceResourceWhitelist:
     kind: HTTPRoute
   - group: gateway.networking.k8s.io
     kind: GRPCRoute
+  - group: gateway.networking.k8s.io
+    kind: ListenerSet
     
 ## Orphaned resources
 ## @param orphanedResources.warn Whether to warn about orphaned resources
