@@ -1,0 +1,93 @@
+suite: test ArgoCD role
+release:
+  name: release-name
+  namespace: release-namespace
+templates:
+  - Role.yaml
+tests:
+  - it: should conform to default values
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Role
+      - equal:
+          path: metadata.name
+          value: release-name
+      - equal:
+          path: metadata.namespace
+          value: release-namespace
+      - lengthEqual:
+          path: rules
+          count: 1
+      - contains:
+          path: rules
+          content:
+            apiGroups:
+              - ""
+            resources:
+              - secrets
+            verbs:
+              - get
+              - list
+              - watch
+  - it: should conform to direct values (even if global values are set)
+    set:
+      name: 'set-name'
+      namespace: 'set-namespace'
+      global:
+        namespace: 'global-namespace'
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Role
+      - equal:
+          path: metadata.name
+          value: set-name
+      - equal:
+          path: metadata.namespace
+          value: set-namespace
+      - lengthEqual:
+          path: rules
+          count: 1
+      - contains:
+          path: rules
+          content:
+            apiGroups:
+              - ""
+            resources:
+              - secrets
+            verbs:
+              - get
+              - list
+              - watch
+  - it: should conform to global values
+    set:
+      global:
+        namespace: 'global-namespace'
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Role
+      - equal:
+          path: metadata.name
+          value: release-name
+      - equal:
+          path: metadata.namespace
+          value: global-namespace
+      - lengthEqual:
+          path: rules
+          count: 1
+      - contains:
+          path: rules
+          content:
+            apiGroups:
+              - ""
+            resources:
+              - secrets
+            verbs:
+              - get
+              - list
+              - watch

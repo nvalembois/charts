@@ -1,7 +1,7 @@
 {{- define "namespace" -}}
-{{- default .Release.Namespace .Values.namespace -}}
+{{- .Values.namespace | default (.Values.global | default (dict) ).namespace | default .Release.Namespace -}}
 {{- end -}}
 
 {{- define "name" -}}
-{{- default .Release.Name .Values.name | lower | replace "." "-" | replace "_" "-" | trunc 60 | trimSuffix "-" -}}
+{{- .Values.name | default .Release.Name | lower | replace "." "-" | replace "_" "-" | trunc 60 | trimSuffix "-" -}}
 {{- end -}}
