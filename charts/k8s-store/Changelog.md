@@ -1,10 +1,16 @@
 # Changelog
 
+## [1.0.5] - 2026-07-12
+
+### Added
+
+- allow install in global.namespace
+
 ## [1.0.4] - 2025-07-24
 
 ### Fixed
 
-- SecrteStore version
+- SecretStore version
 
 ## [1.0.3] - 2024-11-14
 
