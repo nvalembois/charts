@@ -230,6 +230,15 @@
       "properties": {
         "syncPolicy": {"$ref":"#/$defs/syncPolicy"}
       }
+    },
+    "global": {
+      "type":"object",
+      "properties": {
+        "namespace":{
+          "type":"string"
+        }
+      },
+      "additionalProperties": true
     }
   },
   "additionalProperties": false,
