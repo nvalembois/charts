@@ -64,6 +64,7 @@ jobs:
         charts: ${{ env.CHART_DIR }}/${{ env.chart }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         install-mode: if-not-present
+        flags: ''
     # Valider le Chart (Lint)
     - name: Helm lint
       timeout-minutes: 5
