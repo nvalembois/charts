@@ -48,10 +48,23 @@ jobs:
       timeout-minutes: 5
       with:
         fetch-depth: 1
-    # Installer Helm et exécuter le plan de test helm-unittest
+    - name: Install Helm
+      uses: azure/setup-helm@v4.0.0
+      with:
+        version: latest
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install helm-unittest
+      run: |
+        echo "Installing latest version of helm-unittest"
+        helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest
+      shell: bash
+      # Installer Helm et exécuter le plan de test helm-unittest
     - uses: d3adb5/helm-unittest-action@v2
       with: # https://github.com/marketplace/actions/helm-unit-tests#options
         charts: ${{ env.CHART_DIR }}/${{ env.chart }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        install-mode: if-not-present
+        flags: ''
     # Valider le Chart (Lint)
     - name: Helm lint
       timeout-minutes: 5

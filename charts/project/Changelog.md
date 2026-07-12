@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.2] - 2026-07-12
+
+### Added
+
+- namespaceResourceWhitelist gateway.networking.k8s.io/ListenerSet
+- namespaceResourceWhitelist external-secrets.io/SecretStore
+- namespaceResourceWhitelist external-secrets.io/ExternalSecret
+- namespaceResourceWhitelist external-secrets.io/PushSecret
+- namespaceResourceWhitelist external-secrets.io/Password
+
 ## [1.1.1] - 2026-02-07
 
 ### Added

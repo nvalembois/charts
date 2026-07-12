@@ -226,9 +226,34 @@ tests:
           content:
             group: gateway.networking.k8s.io
             kind: GRPCRoute
-      - lengthEqual: # 36 resources
+      - contains:
           path: spec.namespaceResourceWhitelist
-          count: 36
+          content:
+            group: gateway.networking.k8s.io
+            kind: ListenerSet
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: external-secrets.io
+            kind: SecretStore
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: external-secrets.io
+            kind: ExternalSecret
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: external-secrets.io
+            kind: PushSecret
+      - contains:
+          path: spec.namespaceResourceWhitelist
+          content:
+            group: generators.external-secrets.io
+            kind: Password
+      - lengthEqual: # 41 resources
+          path: spec.namespaceResourceWhitelist
+          count: 41
       - equal:
           path: spec.orphanedResources.warn
           value: false
