@@ -52,6 +52,7 @@ jobs:
     - uses: d3adb5/helm-unittest-action@v2
       with: # https://github.com/marketplace/actions/helm-unit-tests#options
         charts: ${{ env.CHART_DIR }}/${{ env.chart }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
     # Valider le Chart (Lint)
     - name: Helm lint
       timeout-minutes: 5
