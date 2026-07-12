@@ -301,6 +301,9 @@ tests:
         - syncWindows-{{ .Release.Name }}
       sourceNamespaces:
         - sourceNamespaces-{{ .Release.Name }}
+      global:
+        namespace: 'global-namespace'
+        divert: 'divert'
     asserts:
       - isKind:
           of: AppProject

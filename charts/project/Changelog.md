@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.4] - 2026-07-12
+
+### Fixes
+
+- allow global values
+
 ## [1.1.3] - 2026-07-12
 
 ### Chores
