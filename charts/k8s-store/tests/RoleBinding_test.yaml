@@ -1,0 +1,96 @@
+suite: test ArgoCD RoleBinding
+release:
+  name: release-name
+  namespace: release-namespace
+templates:
+  - RoleBinding.yaml
+tests:
+  - it: should conform to default values
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: RoleBinding
+      - equal:
+          path: metadata.name
+          value: release-name
+      - equal:
+          path: metadata.namespace
+          value: release-namespace
+      - equal:
+          path: roleRef
+          value:
+            apiGroup: rbac.authorization.k8s.io
+            kind: Role
+            name: release-name
+      - lengthEqual:
+          path: subjects
+          count: 1
+      - contains:
+          path: subjects
+          content:
+            kind: ServiceAccount
+            name: release-name
+            namespace: release-namespace
+  - it: should conform to direct values (even if global values are set)
+    set:
+      name: 'set-name'
+      namespace: 'set-namespace'
+      global:
+        namespace: 'global-namespace'
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: RoleBinding
+      - equal:
+          path: metadata.name
+          value: set-name
+      - equal:
+          path: metadata.namespace
+          value: set-namespace
+      - equal:
+          path: roleRef
+          value:
+            apiGroup: rbac.authorization.k8s.io
+            kind: Role
+            name: set-name
+      - lengthEqual:
+          path: subjects
+          count: 1
+      - contains:
+          path: subjects
+          content:
+            kind: ServiceAccount
+            name: set-name
+            namespace: set-namespace
+  - it: should conform to global values
+    set:
+      global:
+        namespace: 'global-namespace'
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: RoleBinding
+      - equal:
+          path: metadata.name
+          value: release-name
+      - equal:
+          path: metadata.namespace
+          value: global-namespace
+      - equal:
+          path: roleRef
+          value:
+            apiGroup: rbac.authorization.k8s.io
+            kind: Role
+            name: release-name
+      - lengthEqual:
+          path: subjects
+          count: 1
+      - contains:
+          path: subjects
+          content:
+            kind: ServiceAccount
+            name: release-name
+            namespace: global-namespace
