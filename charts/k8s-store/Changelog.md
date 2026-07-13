@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.6] - 2026-07-13
+
+### Added
+
+- enabled option
+
 ## [1.0.5] - 2026-07-12
 
 ### Added
