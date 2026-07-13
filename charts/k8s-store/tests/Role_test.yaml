@@ -33,6 +33,7 @@ tests:
               - watch
   - it: should conform to direct values (even if global values are set)
     set:
+      enabled: true
       name: 'set-name'
       namespace: 'set-namespace'
       global:
@@ -91,3 +92,9 @@ tests:
               - get
               - list
               - watch
+  - it: should do nothing if enabled=false
+    set:
+      enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

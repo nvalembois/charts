@@ -94,3 +94,9 @@ tests:
             kind: ServiceAccount
             name: release-name
             namespace: global-namespace
+  - it: should do nothing if enabled=false
+    set:
+      enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

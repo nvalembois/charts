@@ -2,6 +2,10 @@
   "title":"Chart Values",
   "type":"object",
   "properties": {
+    "enabled": {
+      "type":"boolean",
+      "default": true
+    },
     "namespace": {
       "type":"string",
       "description":"Objects namespace",

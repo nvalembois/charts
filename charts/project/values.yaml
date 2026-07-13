@@ -20,9 +20,9 @@ namespace:
     enforce: restricted
 
 ## @section k8s-store
-## @param k8s-store.create Specify whether to create a k8s-store
+## @param k8s-store.enabled Specify whether to create a k8s-store
 k8s-store:
-  create: false
+  enabled: false
   name: k8s-store
 
 ## ArgoCD Project Configuration

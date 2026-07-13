@@ -1,4 +1,5 @@
 ---
+{{- if or (not (hasKey .Values "enabled")) .Values.enabled }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -12,3 +13,4 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "name" . | quote  }}
   namespace: {{ include "namespace" . | quote  }}
+{{- end }}
