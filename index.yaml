@@ -41,6 +41,21 @@ entries:
   k8s-store:
   - annotations:
       artifacthub.io/changes: |
+        - description: enabled option
+          kind: add
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-07-13T08:17:20.787951611Z"
+    description: k8s-store Helm Chart that creates a SecretStore for local namespace
+      in local kubernetes cluster
+    digest: 04d5a9db0f6941f9c9f4fe3164f3ce34a3358fb93eb389b90225bbec7a09d4c7
+    name: k8s-store
+    type: application
+    urls:
+    - k8s-store-1.0.6.tgz
+    version: 1.0.6
+  - annotations:
+      artifacthub.io/changes: |
         - description: allow install in global.namespace
           kind: add
     apiVersion: v2
@@ -447,4 +462,4 @@ entries:
     urls:
     - project-1.0.0.tgz
     version: 1.0.0
-generated: "2026-07-12T09:16:40.726945374Z"
+generated: "2026-07-13T08:17:20.926624558Z"
