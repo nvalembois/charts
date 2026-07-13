@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5] - 2026-07-13
+
+### Refactor
+
+- k8s-strore.create -> k8s-store.enabled
+
+
 ## [1.1.4] - 2026-07-12
 
 ### Fixes
