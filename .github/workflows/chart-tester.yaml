@@ -17,7 +17,7 @@ jobs:
     steps:
     # Checkout le code du repository
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: 1
     - name: Get charts changed
@@ -44,12 +44,12 @@ jobs:
     steps:
     # Checkout le code du repository
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       timeout-minutes: 5
       with:
         fetch-depth: 1
     - name: Install Helm
-      uses: azure/setup-helm@v4.0.0
+      uses: azure/setup-helm@v5.0.1
       with:
         version: latest
         token: ${{ secrets.GITHUB_TOKEN }}
