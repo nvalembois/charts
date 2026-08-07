@@ -1,9 +1,25 @@
-# Chart.yaml
+---
 apiVersion: v2
+description: A common powered chart template. This can be useful for small projects that don't have their own chart.
 name: aeneria
-description: aeneria deployment via Helm
-type: application
-version: 1.0.1
+version: 1.0.2
 # renovate: image=ghcr.io/nvalembois/aeneria-app
 appVersion: 2.1.1
 kubeVersion: ">=1.22.0-0"
+maintainers:
+  - name: nvalembois
+    email: nvalembois@live.com
+dependencies:
+  - name: common
+    repository: https://bjw-s.github.io/helm-charts
+    version: 3.5.1
+# annotations:
+#   artifacthub.io/changes: |-
+#     - kind: changed
+#       description: |
+#         Updated library version to 3.5.1.
+#       links:
+#         - name: Upgrade instructions from v2.x
+#           url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+#         - name: Common library chart definition
+#           url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
